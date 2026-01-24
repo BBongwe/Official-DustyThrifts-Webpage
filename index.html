@@ -32,39 +32,39 @@
       <div class="scroll-gallery" aria-label="Vintage clothing gallery">
         <!-- Image containers -->
         <article class="image-container">
-          <img src="tee.jpg" alt="Big Day Out Tee" />
+          <img src="tee.jpeg" alt="Big Day Out Tee" />
           <figcaption class="image-overlay">Big Day Out Tee</figcaption>
         </article>
         <article class="image-container">
-          <img src="jerseys.jpg" alt="Vintage Vest" />
+          <img src="jerseys.jpeg" alt="Vintage Vest" />
           <figcaption class="image-overlay">Vintage Vest</figcaption>
         </article>
         <article class="image-container">
-          <img src="accessories1.jpg" alt="Skull Necklace" />
+          <img src="accessories1.jpeg" alt="Skull Necklace" />
           <figcaption class="image-overlay">Skull Necklace</figcaption>
         </article>
         <article class="image-container">
-          <img src="me.jpg" alt="Chief Executive Officer" />
+          <img src="me.jpeg" alt="Chief Executive Officer" />
           <figcaption class="image-overlay">Chief Executive Officer</figcaption>
         </article>
         <article class="image-container">
-          <img src="jersey1.jpg" alt="Knitted Button up Vintage Top" />
+          <img src="jersey1.jpeg" alt="Knitted Button up Vintage Top" />
           <figcaption class="image-overlay">Knitted Button up Vintage Top</figcaption>
         </article>
         <article class="image-container">
-          <img src="cargo.JPG" alt="Black Cargo Pants" />
+          <img src="cargo.jpeg" alt="Black Cargo Pants" />
           <figcaption class="image-overlay">Black Cargo Pants</figcaption>
         </article>
         <article class="image-container">
-          <img src="jersey3.JPG" alt="Ash Greek Jacket" />
+          <img src="jersey3.jpeg" alt="Ash Greek Jacket" />
           <figcaption class="image-overlay">Ash Greek Jacket</figcaption>
         </article>
         <article class="image-container">
-          <img src="paris.JPG" alt="Lulu Paris Tee" />
+          <img src="paris.jpeg" alt="Lulu Paris Tee" />
           <figcaption class="image-overlay">Lulu Paris Tee</figcaption>
         </article>
         <article class="image-container">
-          <img src="sweater.JPG" alt="Twinlife Sweater" />
+          <img src="sweater.jpeg" alt="Twinlife Sweater" />
           <figcaption class="image-overlay">Twinlife Sweater</figcaption>
         </article>
         <article class="image-container">
@@ -85,13 +85,13 @@
       <h2>Our Collection</h2>
       <div class="gallery-grid" aria-label="Featured vintage collection">
         <a href="https://www.instagram.com/p/CknnzFvNwkP/?img_index=1&igsh=ejFiczB2dThtb3B0" target="_blank" rel="noopener noreferrer">
-          <img src="pants.jpg" alt="Vintage Pants" />
+          <img src="pants.jpeg" alt="Vintage Pants" />
         </a>
         <a href="https://www.instagram.com/p/CjDi2X6NZIT/?igsh=OHIwNW1ubTF2bTNx" target="_blank" rel="noopener noreferrer">
-          <img src="accessories.jpg" alt="Vintage Accessories" />
+          <img src="accessories.jpeg" alt="Vintage Accessories" />
         </a>
         <a href="https://www.instagram.com/p/ChteJ-ANirz/?igsh=MWI5c3FqZTA2MmdoeQ==" target="_blank" rel="noopener noreferrer">
-          <img src="re.JPG" alt="Vintage Jerseys" />
+          <img src="re.jpeg" alt="Vintage Jerseys" />
         </a>
       </div>
     </section>
@@ -100,7 +100,7 @@
       <h2>Get in Touch</h2>
       <p>DM us on <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer">Instagram</a> or use the form below:</p>
 
-      <form id="contactform" action="https://formspree.io/f/mzzvjnjv" method="POST" class="contact-form" novalidate>
+        <form id="contactform" action="https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact" method="POST" class="contact-form" novalidate>
         <label for="name">Name</label>
         <input type="text" id="name" name="name" required autocomplete="name" />
 
@@ -119,7 +119,7 @@
         <label for="message">Message</label>
         <textarea id="message" name="message" rows="5" required></textarea>
 
-        <button type="submit">Send</button>
+        <button type="submit" id="submitBtn">Send</button> 
       </form>
 
       <div id="formMessage" aria-live="polite" style="display: none; text-align: center; margin-top: 1rem; color: green; font-weight: bold;">

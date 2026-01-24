@@ -3,33 +3,56 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contactform');
   const formMessage = document.getElementById('formMessage');
+  const submitBtn = document.getElementById('submitBtn');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    const formData = new FormData(form);
+      // 1. Show "Sending..." state
+      formMessage.style.display = 'block';
+      formMessage.innerText = "Sending...";
+      formMessage.style.color = "#5c4033"; // Match your aesthetic
+      submitBtn.disabled = true;
 
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        headers: { 'Accept': 'application/json' },
-        body: formData,
-      });
+      // 2. Collect the data
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        reason: document.getElementById('reason').value,
+        message: document.getElementById('message').value
+      };
 
-      if (response.ok) {
-        form.reset();
-        form.style.display = 'none';
-        formMessage.style.display = 'block';
-      } else {
-        const data = await response.json();
-        alert(data.error || 'Oops! There was a problem submitting your form.');
+      try {
+        // 3. Send to your verified AWS API Gateway
+        const response = await fetch('https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          // 4. Success! Hide form and show success message
+          form.reset();
+          form.style.display = 'none';
+          formMessage.innerText = "Thank you for your message! We'll get back to you soon. 😊";
+          formMessage.style.color = "green";
+        } else {
+          throw new Error('Server responded with an error');
+        }
+      } catch (error) {
+        // 5. Error handling
+        formMessage.innerText = "Oops! There was a problem. Please try again or DM us on Instagram.";
+        formMessage.style.color = "red";
+        submitBtn.disabled = false;
+        console.error("Submission Error:", error);
       }
-    } catch (error) {
-      alert('Oops! There was a problem submitting your form.');
-    }
-  });
+    });
+  }
 
-  // Optional: Smooth scroll for nav links
+  // Smooth scroll for nav links
   const navLinks = document.querySelectorAll('nav a[href^="#"]');
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
