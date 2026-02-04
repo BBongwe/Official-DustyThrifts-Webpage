@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(formData),
         });
 
+        if (!formData.name || !formData.reason || !formData.message) {
+  formMessage.style.display = 'block';
+  formMessage.innerText = "Please fill in all required fields.";
+  formMessage.style.color = "red";
+  submitBtn.disabled = false;
+  return;
+}
+
         if (response.ok) {
           // 4. Success! Hide form and show success message
           form.reset();
