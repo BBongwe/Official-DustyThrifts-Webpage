@@ -33,12 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify(formData),
         });
 
-        if (!formData.name || !formData.reason || !formData.message) {
-  formMessage.style.display = 'block';
-  formMessage.innerText = "Please fill in all required fields.";
-  formMessage.style.color = "red";
-  submitBtn.disabled = false;
-  return;
+        // 1. IMPORTANT: Prevent the default form submission first
+        event.preventDefault(); 
+
+// 2. Use .trim() to catch strings that are just spaces
+if (!formData.name?.trim() || !formData.reason?.trim() || !formData.message?.trim()) {
+    formMessage.style.display = 'block';
+    formMessage.innerText = "Please fill in all required fields.";
+    formMessage.style.color = "red";
+    submitBtn.disabled = false;
+    return; // Stops the function here
 }
 
         if (response.ok) {
