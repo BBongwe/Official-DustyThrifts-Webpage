@@ -145,7 +145,8 @@ main {
 .image-container {
   position: relative;
   flex: 0 0 auto;
-  width: 400px;
+  width: 300px;
+  height: 450px;
   scroll-snap-align: start;
   border-radius: 12px;
   overflow: hidden;
@@ -165,8 +166,9 @@ main {
 .image-container img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
   vertical-align: bottom;
 }
 
@@ -325,7 +327,8 @@ footer {
   }
 
   .image-container {
-    width: 90vw;
+    width: 80vw;
+    height: 400px;
   }
 
   .gallery-grid {
