@@ -149,6 +149,7 @@ main {
   scroll-snap-align: start;
   border-radius: 12px;
   overflow: hidden;
+  line-height: 0;
   box-shadow: 0 8px 20px rgba(26, 115, 232, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background-color: #fff;
@@ -167,7 +168,6 @@ main {
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 12px 12px 0 0;
 }
 
 .image-overlay {
@@ -180,7 +180,7 @@ main {
   font-weight: 600;
   padding: 0.8rem 1rem;
   font-size: 1rem;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0;
   text-align: center;
   user-select: none;
   pointer-events: none;
