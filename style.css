@@ -7,6 +7,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f9fafb;
   color: #333;
@@ -28,11 +29,11 @@ a:focus {
 }
 
 header {
-  background-color: #104ea0;
+background-color: #104ea0;
   color: white;
-  padding: 1rem 1rem;
+  padding: 1rem;
   text-align: center;
-  box-shadow: 0 2px 5px rgba(26, 115, 232, 0.3);
+  position: relative;
 }
 
 header h1 {
@@ -54,10 +55,11 @@ nav {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.95)
-  backdrop-filter: blur(5px)
+  background-color: rgba(255, 255, 255, 0.95); /* Added semicolon */
+  backdrop-filter: blur(5px);                  /* Added semicolon */
   border-bottom: 1px solid #eee;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: none; /* Add this! Since you want a side menu, hide the old top nav bar */
 }
 
 .nav-list {
@@ -311,14 +313,99 @@ main {
   outline: none;
 }
 
+/* The Hamburger Button */
+.menu-toggle {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: white; /* Matches your blue header text */
+  border-radius: 2px;
+}
+
+/* The Side Menu Panel */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: -300px; /* Hidden by default */
+  width: 250px;
+  height: 100vh;
+  background-color: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 3000;
+  padding: 4rem 1.5rem;
+  display: block !important;
+}
+
+.side-menu.active {
+  right: 0 !important; /* Slides in */
+}
+
+.nav-list-side {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-list-side li {
+  margin-bottom: 2rem;
+}
+
+.nav-list-side a {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 1001;
+}
+
+.menu-overlay.active {
+  display: block;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 /* Footer */
 footer {
   background-color: #104ea0;
   color: white;
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 0.5rem 0.5em;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   letter-spacing: 0.05em;
   margin-top: 4rem;
 }
@@ -330,16 +417,6 @@ footer {
     padding-left: 1rem;
     padding-right: 1rem;
     padding: 0.5rem 0;
-  }
-
-  .nav-list {
-    justify-content: space-around;
-    padding: 0.75rem 0;
-  }
-
-  .nav-list a {
-    font-size: 0.9rem;
-    padding: 0.6rem 1rem;
   }
 
   .image-container {

@@ -11,15 +11,27 @@
   <header>
     <h1>Dusty Thrifts</h1>
     <p>Vintage finds curated with love</p>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+   </button>
   </header>
 
-  <nav>
-    <ul class="nav-list">
-      <li><a href="#about">About</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  
+
+
+<nav class="side-menu" id="sideMenu">
+  <button class="close-btn" id="closeMenu">&times;</button>
+  <ul class="nav-list-side">
+    <li><a href="#about">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="menu-overlay" id="menuOverlay"></div>
 
   <main>
     <section class="intro">

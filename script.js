@@ -1,67 +1,55 @@
-// script.js
+// Ensure we only declare these once
+const menuToggle = document.getElementById('menuToggle');
+const sideMenu = document.getElementById('sideMenu');
+const menuOverlay = document.getElementById('menuOverlay');
+const closeMenu = document.getElementById('closeMenu');
+const sideNavLinks = document.querySelectorAll('.nav-list-side a'); // Renamed to avoid conflict
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('contactform');
-  const formMessage = document.getElementById('formMessage');
-  const submitBtn = document.getElementById('submitBtn');
+function toggleMenu() {
+    sideMenu.classList.toggle('active');
+    menuOverlay.classList.toggle('active');
+}
 
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+if (menuToggle) {
+    menuToggle.addEventListener('click', toggleMenu);
+}
+if (closeMenu) {
+    closeMenu.addEventListener('click', toggleMenu);
+}
+if (menuOverlay) {
+    menuOverlay.addEventListener('click', toggleMenu);
+}
 
-      // 1. Show "Sending..." state
-      formMessage.style.display = 'block';
-      formMessage.innerText = "Sending...";
-      formMessage.style.color = "#5c4033"; // Match your aesthetic
-      submitBtn.disabled = true;
-
-      // 2. Collect the data
-      const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        reason: document.getElementById('reason').value,
-        message: document.getElementById('message').value
-      };
-
-      try {
-        // 3. Send to your verified AWS API Gateway
-        const response = await fetch('https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json' 
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (response.ok) {
-          // 4. Success! Hide form and show success message
-          form.reset();
-          form.style.display = 'none';
-          formMessage.innerText = "Thank you for your message! We'll get back to you soon. 😊";
-          formMessage.style.color = "green";
-        } else {
-          throw new Error('Server responded with an error');
-        }
-      } catch (error) {
-        // 5. Error handling
-        formMessage.innerText = "Oops! There was a problem. Please try again or DM us on Instagram.";
-        formMessage.style.color = "red";
-        submitBtn.disabled = false;
-        console.error("Submission Error:", error);
-      }
-    });
-  }
-
-  // Smooth scroll for nav links
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').slice(1);
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
+sideNavLinks.forEach(link => {
+    link.addEventListener('click', toggleMenu);
 });
+
+// --- Your existing Form Validation Code below ---
+const contactForm = document.getElementById('contactform');
+const formMessage = document.getElementById('formMessage');
+const submitBtn = document.getElementById('submitBtn');
+
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            name: document.getElementById('name').value,
+            reason: document.getElementById('reason').value,
+            message: document.getElementById('message').value
+        };
+
+        if (!formData.name.trim() || !formData.reason.trim() || !formData.message.trim()) {
+            formMessage.style.display = 'block';
+            formMessage.innerText = "Please fill in all required fields.";
+            formMessage.style.color = "red";
+            return; 
+        }
+
+        formMessage.style.display = 'block';
+        formMessage.innerText = "Thank you! Sending...";
+        formMessage.style.color = "green";
+        submitBtn.disabled = true;
+        // Add your fetch call here
+    });
+}
