@@ -24,6 +24,7 @@ sideNavLinks.forEach(link => {
     link.addEventListener('click', toggleMenu);
 });
 
+document.getElementById("year").textContent = new Date().getFullYear();
 // --- Your existing Form Validation Code below ---
 const contactForm = document.getElementById('contactform');
 const formMessage = document.getElementById('formMessage');
