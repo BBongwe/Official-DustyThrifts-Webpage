@@ -51,6 +51,6 @@ if (contactForm) {
         formMessage.innerText = "Thank you! Sending...";
         formMessage.style.color = "green";
         submitBtn.disabled = true;
-        // Add your fetch call here
+        fetch("https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact")// Add your fetch call here
     });
 }
