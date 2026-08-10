@@ -3,148 +3,216 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Dusty Thrifts</title>
+  <title>DustyThrifts | Vintage Clothing</title>
   <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#104ea0">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#F4F0EA">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <header>
-    <h1> Dusty Thrifts</h1>
-    <p>Vintage finds curated with love</p>
-
-    <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-   </button>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <h1>DUSTY<span>THRIFTS.</span></h1>
+      </div>
+      <div class="nav-desktop">
+        <a href="#about">About</a>
+        <a href="#collection">Collection</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+    <div class="header-sub">
+      <p>Vintage finds curated with love.</p>
+    </div>
   </header>
 
-  
+  <nav class="side-menu" id="sideMenu">
+    <button class="close-btn" id="closeMenu">&times;</button>
+    <ul class="nav-list-side">
+      <li><a href="#about">About</a></li>
+      <li><a href="#collection">Collection</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-
-<nav class="side-menu" id="sideMenu">
-  <button class="close-btn" id="closeMenu">&times;</button>
-  <ul class="nav-list-side">
-    <li><a href="#about">About</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<div class="menu-overlay" id="menuOverlay"></div>
+  <div class="menu-overlay" id="menuOverlay"></div>
 
   <main>
-    <section class="intro">
-      <p>Welcome to Dusty Thrifts, your go-to destination for unique vintage clothing.</p>
-      <h2>A snippet of our Finds</h2>
-      <div class="swipe-hint" aria-label="Swipe hint">
-        <span>Swipe to view more→</span>
+    <!-- Recent Additions Gallery -->
+    <section class="section" style="padding-top: 1rem;">
+      <div class="section-header">
+        <h3>Recent Additions</h3>
+        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
       </div>
-
-      <div class="scroll-gallery" aria-label="Vintage clothing gallery">
-        <!-- Image containers -->
-        <article class="image-container">
-          <img src="tee.jpeg" alt="Big Day Out Tee" />
-          <figcaption class="image-overlay">Big Day Out Tee</figcaption>
+      <div class="scroll-gallery">
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="tee.jpeg" alt="Big Day Out Tee" />
+          </div>
+          <figcaption class="image-title">Big Day Out Tee</figcaption>
         </article>
-        <article class="image-container">
-          <img src="jerseys.jpeg" alt="Vintage Vest" />
-          <figcaption class="image-overlay">Vintage Vest</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="jerseys.jpeg" alt="Vintage Vest" />
+          </div>
+          <figcaption class="image-title">Vintage Vest</figcaption>
         </article>
-        <article class="image-container">
-          <img src="accessories1.jpeg" alt="Skull Necklace" />
-          <figcaption class="image-overlay">Skull Necklace</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="accessories1.jpeg" alt="Skull Necklace" />
+          </div>
+          <figcaption class="image-title">Skull Necklace</figcaption>
         </article>
-        <article class="image-container">
-          <img src="me.jpeg" alt="Chief Executive Officer" />
-          <figcaption class="image-overlay">Chief Executive Officer</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="me.jpeg" alt="Chief Executive Officer" />
+          </div>
+          <figcaption class="image-title">Chief Executive Officer</figcaption>
         </article>
-        <article class="image-container">
-          <img src="jersey1.jpeg" alt="Knitted Button up Vintage Top" />
-          <figcaption class="image-overlay">Knitted Button up Vintage Top</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="jersey1.jpeg" alt="Knitted Button up Vintage Top" />
+          </div>
+          <figcaption class="image-title">Knitted Button up Vintage Top</figcaption>
         </article>
-        <article class="image-container">
-          <img src="cargo.jpeg" alt="Black Cargo Pants" />
-          <figcaption class="image-overlay">Black Cargo Pants</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="cargo.jpeg" alt="Black Cargo Pants" />
+          </div>
+          <figcaption class="image-title">Black Cargo Pants</figcaption>
         </article>
-        <article class="image-container">
-          <img src="jersey3.jpeg" alt="Ash Greek Jacket" />
-          <figcaption class="image-overlay">Ash Greek Jacket</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="jersey3.jpeg" alt="Ash Greek Jacket" />
+          </div>
+          <figcaption class="image-title">Ash Greek Jacket</figcaption>
         </article>
-        <article class="image-container">
-          <img src="paris.jpeg" alt="Lulu Paris Tee" />
-          <figcaption class="image-overlay">Lulu Paris Tee</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="paris.jpeg" alt="Lulu Paris Tee" />
+          </div>
+          <figcaption class="image-title">Lulu Paris Tee</figcaption>
         </article>
-        <article class="image-container">
-          <img src="sweater.jpeg" alt="Twinlife Sweater" />
-          <figcaption class="image-overlay">Twinlife Sweater</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="sweater.jpeg" alt="Twinlife Sweater" />
+          </div>
+          <figcaption class="image-title">Twinlife Sweater</figcaption>
         </article>
-        <article class="image-container">
-          <img src="pants1.jpeg" alt="Blue VALENTINO JEANS" />
-          <figcaption class="image-overlay">Blue VALENTINO JEANS</figcaption>
+        <article class="vintage-card">
+          <div class="img-wrapper">
+            <img src="pants1.jpeg" alt="Blue VALENTINO JEANS" />
+          </div>
+          <figcaption class="image-title">Blue VALENTINO JEANS</figcaption>
         </article>
       </div>
     </section>
 
-    <section id="about" class="section about">
-      <h2>About Us</h2>
-      <p>
-        Dusty Thrifts is a handpicked vintage clothing store where old meets gold. We specialize in timeless vintage jerseys, classic pants, one of a kind accessories and clothing items that add character to any wardrobe. Each piece we offer carries a bit of history, a whisper from another era, chosen not just for its look, but for the story it tells. Whether you’re hunting for a statement item or building a curated collection, Dusty Thrifts helps you wear nostalgia with pride.
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+      <h3 class="section-title">About Us</h3>
+      <p class="editorial-text">
+        DustyThrifts is a handpicked vintage clothing store where old meets gold. We specialize in timeless vintage jerseys, classic pants, one-of-a-kind accessories, and clothing items that add character to any wardrobe. Each piece we offer carries a bit of history, a whisper from another era, chosen not just for its look, but for the story it tells.
       </p>
     </section>
 
-    <section id="gallery" class="section gallery">
-      <h2>Our Collection</h2>
-      <div class="gallery-grid" aria-label="Featured vintage collection">
-        <a href="https://www.instagram.com/p/CknnzFvNwkP/?img_index=1&igsh=ejFiczB2dThtb3B0" target="_blank" rel="noopener noreferrer">
-          <img src="pants.jpeg" alt="Vintage Pants" />
+    <!-- Featured Drops -->
+    <section id="collection" class="section">
+      <div class="section-header">
+        <h3 class="section-title" style="margin:0;">Featured Drops</h3>
+        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </div>
+      <div class="scroll-gallery">
+        <a href="https://www.instagram.com/p/CknnzFvNwkP/?img_index=1&igsh=ejFiczB2dThtb3B0" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper">
+            <img src="pants.jpeg" alt="Vintage Pants" />
+          </div>
+          <div class="item-details">
+            <span>Vintage Pants</span>
+            <span class="arrow">&nearr;</span>
+          </div>
         </a>
-        <a href="https://www.instagram.com/p/CjDi2X6NZIT/?igsh=OHIwNW1ubTF2bTNx" target="_blank" rel="noopener noreferrer">
-          <img src="accessories.jpeg" alt="Vintage Accessories" />
+
+        <a href="https://www.instagram.com/p/CjDi2X6NZIT/?igsh=OHIwNW1ubTF2bTNx" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper">
+            <img src="accessories.jpeg" alt="Vintage Accessories" />
+          </div>
+          <div class="item-details">
+            <span>Vintage Accessories</span>
+            <span class="arrow">&nearr;</span>
+          </div>
         </a>
-        <a href="https://www.instagram.com/p/ChteJ-ANirz/?igsh=MWI5c3FqZTA2MmdoeQ==" target="_blank" rel="noopener noreferrer">
-          <img src="re.jpeg" alt="Vintage Jerseys" />
+
+        <a href="https://www.instagram.com/p/ChteJ-ANirz/?igsh=MWI5c3FqZTA2MmdoeQ==" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper">
+            <img src="jersey1.jpeg" alt="Vintage Jerseys" />
+          </div>
+          <div class="item-details">
+            <span>Vintage Jerseys</span>
+            <span class="arrow">&nearr;</span>
+          </div>
         </a>
       </div>
     </section>
 
-    <section id="contact" class="section contact">
-      <h2>Get in Touch</h2>
-      <p>DM us on <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer">Instagram</a> or use the form below:</p>
+    <!-- Contact Section -->
+    <section id="contact" class="section contact-section">
+      <div class="contact-header">
+        <h3 class="section-title">Get in Touch</h3>
+        <p>DM us on <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer" class="insta-link">Instagram</a> or drop a line below.</p>
+      </div>
 
-        <form id="contactform" action="https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact" method="POST" class="contact-form">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required autocomplete="name" />
+      <form id="contactform" action="https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact" method="POST" class="vintage-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Enter your name"/>
+        </div>
 
-        <label for="email">Email (optional)</label>
-        <input type="email" id="email" name="email" autocomplete="email" />
+        <div class="form-group">
+          <label for="email">Email (optional)</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="Enter your email"/>
+        </div>
 
-        <label for="reason">Reason for Contact</label>
-        <select id="reason" name="reason" required>
-          <option value="" disabled selected>-- Select an option --</option>
-          <option value="Product Inquiry">Product Inquiry</option>
-          <option value="General Message">General Message</option>
-          <option value="Order Status">Order Status</option>
-          <option value="Custom Request">Custom Request</option>
-        </select>
+        <div class="form-group">
+          <label for="reason">Subject</label>
+          <select id="reason" name="reason" required>
+            <option value="" disabled selected>Select an inquiry...</option>
+            <option value="Product Inquiry">Product Inquiry</option>
+            <option value="General Message">General Message</option>
+            <option value="Order Status">Order Status</option>
+            <option value="Custom Request">Custom Request</option>
+          </select>
+        </div>
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" required placeholder="How can we help you?"></textarea>
+        </div>
 
-        <button type="submit" id="submitBtn">Send</button> 
+        <button type="submit" id="submitBtn" class="btn-primary">Send Message</button> 
       </form>
 
-      <div id="formMessage" aria-live="polite" style="display: none; text-align: center; margin-top: 1rem; color: green; font-weight: bold;">
-        Thank you for your message! We'll get back to you soon. 😊
-      </div>
+      <div id="formMessage" aria-live="polite" class="form-feedback" style="display: none;"></div>
     </section>
   </main>
 
-  <footer>
-    <p>&copy; <span id="year"></span> Dusty Thrifts. All rights reserved.</p>
+  <footer class="site-footer">
+    <p>&copy; <span id="year"></span> DustyThrifts. Curated with love.</p>
   </footer>
 
   <script src="script.js"></script>
