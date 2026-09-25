@@ -1,7 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const CART_STORAGE_KEY = 'dustythriftsCart';
   const LAST_ORDER_STORAGE_KEY = 'dustythriftsLastOrder';
-  const PAYMENT_LINK = '';
+  
+  // =========================================================
+  // CONFIGURATION: REPLACE THESE 2 URLS WITH YOUR ACTUAL LINKS
+  // =========================================================
+  const API_GATEWAY_URL = 'YOUR_API_GATEWAY_URL_HERE'; 
+  const PAYMENT_LINK = 'YOUR_YOCO_PAYMENT_LINK_HERE';
 
   let cart = loadCart();
   let toastTimer = null;
@@ -648,8 +653,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // =========================================================
+  // UPDATED CHECKOUT FORM SUBMISSION WITH AWS & YOCO
+  // =========================================================
   const checkoutForm = document.getElementById('checkoutForm');
-  checkoutForm?.addEventListener('submit', (event) => {
+  checkoutForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     if (!validateCheckoutForm()) return;
@@ -658,14 +666,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
     window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
 
-    if (PAYMENT_LINK) {
-      window.location.href = PAYMENT_LINK;
-      return;
+    const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+    if (checkoutBtn) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Processing...';
     }
+    
+    setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
 
-    setFeedback(checkoutMessage, 'Order details are ready. Connect your payment provider link when you are ready to take live payments.', 'success');
-    showToast('Order details prepared.');
-    console.log('DustyThrifts order payload:', orderPayload);
+    try {
+      // Step 1: Save order to DynamoDB via AWS API Gateway
+      if (API_GATEWAY_URL && API_GATEWAY_URL !== 'YOUR_API_GATEWAY_URL_HERE') {
+        const response = await fetch(API_GATEWAY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+
+        if (!response.ok) throw new Error('Failed to save order to AWS database.');
+      }
+
+      // Step 2: Clear the basket since the order is confirmed
+      cart = [];
+      updateCartUI();
+
+      // Step 3: Redirect to Yoco for payment
+      if (PAYMENT_LINK && PAYMENT_LINK !== 'YOUR_YOCO_PAYMENT_LINK_HERE' && PAYMENT_LINK !== '') {
+        setFeedback(checkoutMessage, 'Redirecting to secure payment...', 'success');
+        window.location.href = PAYMENT_LINK;
+      } else {
+        setFeedback(checkoutMessage, 'Order saved! Connect your Yoco payment link to take live payments.', 'success');
+        showToast('Order saved successfully.');
+        console.log('DustyThrifts order payload:', orderPayload);
+      }
+
+    } catch (error) {
+      console.error(error);
+      setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
+      showToast('Error saving order.');
+    } finally {
+      if (checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalBtnText;
+      }
+    }
   });
 
   const contactForm = document.getElementById('contactform');
