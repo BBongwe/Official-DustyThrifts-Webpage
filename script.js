@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================
   // CONFIGURATION: REPLACE THESE 2 URLS WITH YOUR ACTUAL LINKS
   // =========================================================
-  const API_GATEWAY_URL = 'YOUR_API_GATEWAY_URL_HERE'; 
+  const API_GATEWAY_URL = 'arn:aws:lambda:us-east-1:140191458621:function:processDustyThriftsOrder'; 
   const PAYMENT_LINK = 'YOUR_YOCO_PAYMENT_LINK_HERE';
 
   let cart = loadCart();
