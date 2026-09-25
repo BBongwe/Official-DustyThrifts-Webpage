@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>DustyThrifts | Vintage Clothing</title>
+  <title>DustyThrifts | Curated Vintage Clothing South Africa</title>
+  <meta name="description" content="Shop handpicked vintage clothing, jerseys, pants, and accessories from DustyThrifts. Curated thrift finds available online in South Africa." />
+  <meta name="theme-color" content="#F4F0EA" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#F4F0EA">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet" />
 </head>
 
 <body>
@@ -20,26 +20,34 @@
         <h1>DUSTY<span>THRIFTS.</span></h1>
       </div>
       <div class="nav-desktop">
+        <a href="#shop">Shop</a>
         <a href="#about">About</a>
-        <a href="#collection">Collection</a>
+        <a href="#collection">Archive</a>
         <a href="#contact">Contact</a>
       </div>
-      <button class="menu-toggle" id="menuToggle" aria-label="Open Menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
+      <div class="header-actions">
+        <button type="button" class="cart-trigger" id="openCart" aria-label="Open shopping basket">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-controls="sideMenu" aria-expanded="false">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
     </div>
     <div class="header-sub">
       <p>Vintage finds curated with love.</p>
     </div>
   </header>
 
-  <nav class="side-menu" id="sideMenu">
-    <button class="close-btn" id="closeMenu">&times;</button>
+  <nav class="side-menu" id="sideMenu" aria-label="Mobile navigation" aria-hidden="true">
+    <button type="button" class="close-btn" id="closeMenu" aria-label="Close menu">&times;</button>
     <ul class="nav-list-side">
+      <li><a href="#shop">Shop</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#collection">Collection</a></li>
+      <li><a href="#collection">Archive</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -47,172 +55,487 @@
   <div class="menu-overlay" id="menuOverlay"></div>
 
   <main>
-    <!-- Recent Additions Gallery -->
-    <section class="section" style="padding-top: 1rem;">
-      <div class="section-header">
-        <h3>Recent Additions</h3>
-        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </div>
-      <div class="scroll-gallery">
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="tee.jpeg" alt="Big Day Out Tee" />
+    <section id="shop" class="section shop-section" aria-label="Shop vintage clothing">
+      <div class="products-grid">
+        <article class="product-card" data-id="1" data-title="Big Day Out Tee" data-price="280" data-size="L" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Big Day Out Tee">
+            <div class="carousel-slides">
+              <img src="tee.jpg" alt="Big Day Out Tee front" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="paris.jpg" alt="Big Day Out Tee alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="sweater.jpg" alt="Big Day Out Tee detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="tee.jpg" alt="Big Day Out Tee extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Big Day Out Tee</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Big Day Out Tee</h4>
+              <span class="product-price">R280</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: L</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Big Day Out Tee to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="jerseys.jpeg" alt="Vintage Vest" />
+
+        <article class="product-card" data-id="2" data-title="Vintage Knit Vest" data-price="320" data-size="M" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Vintage Knit Vest">
+            <div class="carousel-slides">
+              <img src="jerseys.jpg" alt="Vintage Knit Vest" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey1.jpg" alt="Vintage Knit Vest alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey3.jpg" alt="Vintage Knit Vest detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jerseys.jpg" alt="Vintage Knit Vest extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Vintage Vest</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Vintage Knit Vest</h4>
+              <span class="product-price">R320</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: M</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Vintage Knit Vest to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="accessories1.jpeg" alt="Skull Necklace" />
+
+        <article class="product-card" data-id="3" data-title="Skull Pendant Chain" data-price="180" data-size="S" data-status="available" data-measurements="Length: add measurement" data-fabric="Add material details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Skull Pendant Chain">
+            <div class="carousel-slides">
+              <img src="accessories1.jpg" alt="Skull Pendant Chain" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories.jpg" alt="Skull Pendant Chain alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories1.jpg" alt="Skull Pendant Chain detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories.jpg" alt="Skull Pendant Chain extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Skull Necklace</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Skull Chain</h4>
+              <span class="product-price">R180</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: S</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Skull Pendant Chain to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="me.jpeg" alt="Chief Executive Officer" />
+
+        <article class="product-card" data-id="4" data-title="Knitted Vintage Top" data-price="350" data-size="M" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Knitted Vintage Top">
+            <div class="carousel-slides">
+              <img src="jersey1.jpg" alt="Knitted Vintage Top" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jerseys.jpg" alt="Knitted Vintage Top alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey3.jpg" alt="Knitted Vintage Top detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey1.jpg" alt="Knitted Vintage Top extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Chief Executive Officer</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Knitted Vintage Top</h4>
+              <span class="product-price">R350</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: M</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Knitted Vintage Top to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="jersey1.jpeg" alt="Knitted Button up Vintage Top" />
+
+        <article class="product-card" data-id="5" data-title="Black Cargo Pants" data-price="420" data-size="XL" data-status="available" data-measurements="Waist: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Black Cargo Pants">
+            <div class="carousel-slides">
+              <img src="cargo.jpg" alt="Black Cargo Pants" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="pants.jpg" alt="Black Cargo Pants alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="cargo.jpg" alt="Black Cargo Pants detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="pants.jpg" alt="Black Cargo Pants extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Knitted Button up Vintage Top</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Black Cargo Pants</h4>
+              <span class="product-price">R420</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: XL</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Black Cargo Pants to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="cargo.jpeg" alt="Black Cargo Pants" />
+
+        <article class="product-card" data-id="6" data-title="Ash Greek Jacket" data-price="480" data-size="XXL" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Ash Greek Jacket">
+            <div class="carousel-slides">
+              <img src="jersey3.jpg" alt="Ash Greek Jacket" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey1.jpg" alt="Ash Greek Jacket alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jerseys.jpg" alt="Ash Greek Jacket detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey3.jpg" alt="Ash Greek Jacket extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Black Cargo Pants</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Ash Greek Jacket</h4>
+              <span class="product-price">R480</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: XXL</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Ash Greek Jacket to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="jersey3.jpeg" alt="Ash Greek Jacket" />
+
+        <article class="product-card" data-id="7" data-title="Lulu Paris Graphic Tee" data-price="250" data-size="S" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Lulu Paris Graphic Tee">
+            <div class="carousel-slides">
+              <img src="paris.jpg" alt="Lulu Paris Graphic Tee" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="tee.jpg" alt="Lulu Paris Graphic Tee alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="sweater.jpg" alt="Lulu Paris Graphic Tee detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="paris.jpg" alt="Lulu Paris Graphic Tee extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Ash Greek Jacket</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Lulu Paris Tee</h4>
+              <span class="product-price">R250</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: S</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Lulu Paris Graphic Tee to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="paris.jpeg" alt="Lulu Paris Tee" />
+
+        <article class="product-card" data-id="8" data-title="Twinlife Sweater" data-price="380" data-size="L" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Twinlife Sweater">
+            <div class="carousel-slides">
+              <img src="sweater.jpg" alt="Twinlife Sweater" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey3.jpg" alt="Twinlife Sweater alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jerseys.jpg" alt="Twinlife Sweater detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="sweater.jpg" alt="Twinlife Sweater extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Lulu Paris Tee</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Twinlife Sweater</h4>
+              <span class="product-price">R380</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: L</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Twinlife Sweater to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="sweater.jpeg" alt="Twinlife Sweater" />
+
+        <article class="product-card" data-id="9" data-title="Vintage Pants" data-price="360" data-size="M" data-status="available" data-measurements="Waist: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Vintage Pants">
+            <div class="carousel-slides">
+              <img src="pants.jpg" alt="Vintage Pants" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="cargo.jpg" alt="Vintage Pants alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="pants.jpg" alt="Vintage Pants detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="cargo.jpg" alt="Vintage Pants extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Twinlife Sweater</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Vintage Pants</h4>
+              <span class="product-price">R360</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: M</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Vintage Pants to basket">+</button>
+            </div>
+          </div>
         </article>
-        <article class="vintage-card">
-          <div class="img-wrapper">
-            <img src="pants1.jpeg" alt="Blue VALENTINO JEANS" />
+
+        <article class="product-card" data-id="10" data-title="Vintage Accessories Set" data-price="160" data-size="One Size" data-status="available" data-measurements="Add accessory measurements" data-fabric="Add material details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Vintage Accessories Set">
+            <div class="carousel-slides">
+              <img src="accessories.jpg" alt="Vintage Accessories Set" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories1.jpg" alt="Vintage Accessories Set alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories.jpg" alt="Vintage Accessories Set detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="accessories1.jpg" alt="Vintage Accessories Set extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
           </div>
-          <figcaption class="image-title">Blue VALENTINO JEANS</figcaption>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Accessories Set</h4>
+              <span class="product-price">R160</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">One Size</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Vintage Accessories Set to basket">+</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="11" data-title="Vintage Jersey" data-price="390" data-size="L" data-status="available" data-measurements="Chest: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Vintage Jersey">
+            <div class="carousel-slides">
+              <img src="jersey1.jpg" alt="Vintage Jersey" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jerseys.jpg" alt="Vintage Jersey alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey3.jpg" alt="Vintage Jersey detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="jersey1.jpg" alt="Vintage Jersey extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
+          </div>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Vintage Jersey</h4>
+              <span class="product-price">R390</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: L</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Vintage Jersey to basket">+</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product-card" data-id="12" data-title="Utility Cargo Pants" data-price="410" data-size="L" data-status="available" data-measurements="Waist: add measurement | Length: add measurement" data-fabric="Add fabric details" data-condition="Good vintage condition">
+          <div class="carousel" data-carousel aria-label="Product images for Utility Cargo Pants">
+            <div class="carousel-slides">
+              <img src="cargo.jpg" alt="Utility Cargo Pants" class="active" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="pants.jpg" alt="Utility Cargo Pants alternate view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="cargo.jpg" alt="Utility Cargo Pants detail view" loading="lazy" decoding="async" width="600" height="800" />
+              <img src="pants.jpg" alt="Utility Cargo Pants extra view" loading="lazy" decoding="async" width="600" height="800" />
+            </div>
+            <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+            <div class="carousel-dots" aria-hidden="true"></div>
+          </div>
+          <div class="product-info">
+            <div class="product-header-row">
+              <h4 class="product-title">Utility Cargo Pants</h4>
+              <span class="product-price">R410</span>
+            </div>
+            <div class="product-meta-row">
+              <span class="product-size">Size: L</span>
+              <span class="product-status">Available</span>
+            </div>
+            <div class="product-action-row">
+              <button type="button" class="btn-add-cart" aria-label="Add Utility Cargo Pants to basket">+</button>
+            </div>
+          </div>
         </article>
       </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="section about-section">
       <h3 class="section-title">About Us</h3>
       <p class="editorial-text">
-        DustyThrifts is a handpicked vintage clothing store where old meets gold. We specialize in timeless vintage jerseys, classic pants, one-of-a-kind accessories, and clothing items that add character to any wardrobe. Each piece we offer carries a bit of history, a whisper from another era, chosen not just for its look, but for the story it tells.
+        DustyThrifts is a handpicked vintage clothing store where old meets gold. We specialize in timeless vintage jerseys, classic pants, and one-of-a-kind accessories.
       </p>
     </section>
 
-    <!-- Featured Drops -->
     <section id="collection" class="section">
       <div class="section-header">
-        <h3 class="section-title" style="margin:0;">Featured Drops</h3>
-        <svg class="scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+        <h3 class="section-title original-font-archive" style="margin:0;">Instagram Archive</h3>
       </div>
       <div class="scroll-gallery">
-        <a href="https://www.instagram.com/p/CknnzFvNwkP/?img_index=1&igsh=ejFiczB2dThtb3B0" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
-          <div class="img-wrapper">
-            <img src="pants.jpeg" alt="Vintage Pants" />
-          </div>
-          <div class="item-details">
-            <span>Vintage Pants</span>
-            <span class="arrow">&nearr;</span>
-          </div>
+        <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper"><img src="pants.jpg" alt="Vintage Pants" loading="lazy" decoding="async" width="400" height="440" /></div>
+          <div class="item-details"><span>Vintage Pants</span><span class="arrow">&nearr;</span></div>
         </a>
-
-        <a href="https://www.instagram.com/p/CjDi2X6NZIT/?igsh=OHIwNW1ubTF2bTNx" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
-          <div class="img-wrapper">
-            <img src="accessories.jpeg" alt="Vintage Accessories" />
-          </div>
-          <div class="item-details">
-            <span>Vintage Accessories</span>
-            <span class="arrow">&nearr;</span>
-          </div>
+        <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper"><img src="accessories.jpg" alt="Vintage Accessories" loading="lazy" decoding="async" width="400" height="440" /></div>
+          <div class="item-details"><span>Accessories</span><span class="arrow">&nearr;</span></div>
         </a>
-
-        <a href="https://www.instagram.com/p/ChteJ-ANirz/?igsh=MWI5c3FqZTA2MmdoeQ==" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
-          <div class="img-wrapper">
-            <img src="jersey1.jpeg" alt="Vintage Jerseys" />
-          </div>
-          <div class="item-details">
-            <span>Vintage Jerseys</span>
-            <span class="arrow">&nearr;</span>
-          </div>
+        <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer" class="vintage-card link-card">
+          <div class="img-wrapper"><img src="jersey1.jpg" alt="Vintage Jerseys" loading="lazy" decoding="async" width="400" height="440" /></div>
+          <div class="item-details"><span>Jerseys</span><span class="arrow">&nearr;</span></div>
         </a>
       </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="section contact-section">
       <div class="contact-header">
-        <h3 class="section-title">Get in Touch</h3>
+        <h3 class="section-title original-font-contact">Get in Touch</h3>
         <p>DM us on <a href="https://www.instagram.com/dustythrifts.co/" target="_blank" rel="noopener noreferrer" class="insta-link">Instagram</a> or drop a line below.</p>
       </div>
 
-      <form id="contactform" action="https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact" method="POST" class="vintage-form">
+      <form id="contactform" action="https://bq2qjcazw9.execute-api.us-east-1.amazonaws.com/prod/contact" method="POST" class="vintage-form" novalidate>
         <div class="form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Enter your name"/>
+          <input type="text" id="name" name="name" required autocomplete="name" placeholder="Enter your name" aria-describedby="nameError" />
+          <small class="field-error" id="nameError"></small>
         </div>
-
         <div class="form-group">
-          <label for="email">Email (optional)</label>
-          <input type="email" id="email" name="email" autocomplete="email" placeholder="Enter your email"/>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" placeholder="Enter your email" aria-describedby="emailError" />
+          <small class="field-error" id="emailError"></small>
         </div>
-
         <div class="form-group">
           <label for="reason">Subject</label>
-          <select id="reason" name="reason" required>
+          <select id="reason" name="reason" required aria-describedby="reasonError">
             <option value="" disabled selected>Select an inquiry...</option>
             <option value="Product Inquiry">Product Inquiry</option>
-            <option value="General Message">General Message</option>
             <option value="Order Status">Order Status</option>
-            <option value="Custom Request">Custom Request</option>
           </select>
+          <small class="field-error" id="reasonError"></small>
         </div>
-
         <div class="form-group">
           <label for="message">Message</label>
-          <textarea id="message" name="message" rows="4" required placeholder="How can we help you?"></textarea>
+          <textarea id="message" name="message" rows="3" required placeholder="How can we help?" aria-describedby="messageError"></textarea>
+          <small class="field-error" id="messageError"></small>
         </div>
-
-        <button type="submit" id="submitBtn" class="btn-primary">Send Message</button> 
+        <button type="submit" id="submitBtn" class="btn-primary">Send Message</button>
       </form>
-
-      <div id="formMessage" aria-live="polite" class="form-feedback" style="display: none;"></div>
+      <div id="formMessage" aria-live="polite" class="form-feedback"></div>
     </section>
   </main>
 
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" tabindex="-1">
+    <div class="cart-header">
+      <h3 id="cartTitle">Your Basket (<span id="cartDrawerCount">0</span>)</h3>
+      <button type="button" class="close-btn" id="closeCart" aria-label="Close basket">&times;</button>
+    </div>
+
+    <div class="shipping-banner" id="shippingBanner">
+      Add R300 or more for <strong>FREE Shipping!</strong>
+    </div>
+
+    <div class="cart-body">
+      <div id="cartItemsList" class="cart-items-list" aria-live="polite"></div>
+
+      <form id="checkoutForm" class="checkout-form" novalidate>
+        <h4>Shipping Details</h4>
+
+        <div class="form-group">
+          <label for="custName">Full Name *</label>
+          <input type="text" id="custName" required autocomplete="name" placeholder="Sibusiso Dlamini" aria-describedby="custNameError" />
+          <small class="field-error" id="custNameError"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="custPhone">Phone Number *</label>
+          <input type="tel" id="custPhone" required autocomplete="tel" placeholder="082 123 4567" aria-describedby="custPhoneError" />
+          <small class="field-error" id="custPhoneError"></small>
+        </div>
+
+        <fieldset class="form-group shipping-fieldset">
+          <legend>Select Shipping Method *</legend>
+          <div class="shipping-options">
+            <label class="radio-card">
+              <input type="radio" name="shippingMethod" value="pep" checked />
+              <span class="radio-content">
+                <span>PEP Paxi</span>
+                <small id="pepPriceLabel">R60</small>
+              </span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="shippingMethod" value="aramex" />
+              <span class="radio-content">
+                <span>Aramex Courier</span>
+                <small id="aramexPriceLabel">R100</small>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-group" id="pepField">
+          <label for="pepStore">Closest PEP Store Name/Code *</label>
+          <input type="text" id="pepStore" placeholder="e.g., PEP Rosebank Mall" aria-describedby="pepStoreError" />
+          <small class="field-error" id="pepStoreError"></small>
+        </div>
+
+        <div class="form-group hidden" id="aramexField">
+          <label for="homeAddress">Delivery Address *</label>
+          <textarea id="homeAddress" rows="2" placeholder="Street name, suburb, city, postal code" aria-describedby="homeAddressError"></textarea>
+          <small class="field-error" id="homeAddressError"></small>
+        </div>
+
+        <div class="form-group" id="paymentProviderContainer">
+          <input type="hidden" id="orderPayload" name="orderPayload" />
+        </div>
+
+        <div class="cart-summary">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="cartSubtotal">R0</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping Fee:</span>
+            <span id="cartShipping">R0</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total:</span>
+            <span id="cartTotal">R0</span>
+          </div>
+        </div>
+
+        <div id="checkoutMessage" class="form-feedback" aria-live="polite"></div>
+        <button type="submit" class="btn-checkout" id="checkoutBtn" disabled>Proceed to Payment</button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Product image preview" aria-hidden="true">
+    <div class="lightbox-content">
+      <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close image preview">&times;</button>
+      <img id="lightboxImg" src="" alt="Enlarged product view" />
+      <button type="button" class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image">&lsaquo;</button>
+      <button type="button" class="lightbox-nav next" id="lightboxNext" aria-label="Next image">&rsaquo;</button>
+      <div class="lightbox-details" id="lightboxDetails" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div id="siteToast" class="site-toast" role="status" aria-live="polite"></div>
+
   <footer class="site-footer">
-    <p>&copy; <span id="year"></span> DustyThrifts. Curated with love.</p>
+    <p>&copy; <span id="year"></span> DustyThrifts. All rights reserved.</p>
   </footer>
 
   <script src="script.js"></script>
