@@ -1,17 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const CART_STORAGE_KEY = 'dustythriftsCart';
   const LAST_ORDER_STORAGE_KEY = 'dustythriftsLastOrder';
-  
+
   // =========================================================
-  // CONFIGURATION: REPLACE THESE 2 URLS WITH YOUR ACTUAL LINKS
+  // CONFIGURATION
   // =========================================================
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
-  const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24'; // Insert your pk_test_ or pk_live_ key here
-
-// Initialize Yoco SDK
-const yoco = new YocoSDK({
-  publicKey: YOCO_PUBLIC_KEY
-});
+  const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24';
 
   let cart = loadCart();
   let toastTimer = null;
@@ -73,15 +68,17 @@ const yoco = new YocoSDK({
   }
 
   function getImageSrc(img) {
+    if (!img) return '';
     return (img.getAttribute('src') || img.dataset.src || '').trim();
   }
 
   function getProductFromCard(card) {
-    const firstImage = card.querySelector('.carousel-slides img[src]');
+    const firstImage = card.querySelector('.carousel-slides img[src]') || card.querySelector('.carousel-slides img');
+    const rawId = card.dataset.id || card.id || card.dataset.title || `prod-${Math.random().toString(36).substring(2, 9)}`;
 
     return {
-      id: card.dataset.id,
-      title: card.dataset.title,
+      id: rawId.trim(),
+      title: card.dataset.title || 'Untitled Item',
       price: Number.parseFloat(card.dataset.price || '0'),
       size: card.dataset.size || '',
       status: normaliseStatus(card.dataset.status),
@@ -269,21 +266,18 @@ const yoco = new YocoSDK({
   function getTotals() {
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
     const isFreeShipping = subtotal >= 300;
-    const shippingFee = cart.length === 0 ? 0 : isFreeShipping ? 0 : pepRadio?.checked ? 60 : 100;
+    const isPepSelected = pepRadio?.checked ?? true;
+    const shippingFee = cart.length === 0 ? 0 : isFreeShipping ? 0 : isPepSelected ? 60 : 100;
     const total = cart.length > 0 ? subtotal + shippingFee : 0;
 
-    return {
-      subtotal,
-      shippingFee,
-      total,
-      isFreeShipping
-    };
+    return { subtotal, shippingFee, total, isFreeShipping };
   }
 
   function buildOrderPayload() {
     const totals = getTotals();
-    const shippingMethod = pepRadio?.checked ? 'PEP Paxi' : 'Aramex Courier';
-    const destination = pepRadio?.checked ? pepInput?.value.trim() : aramexInput?.value.trim();
+    const isPepSelected = pepRadio?.checked ?? true;
+    const shippingMethod = isPepSelected ? 'PEP Paxi' : 'Aramex Courier';
+    const destination = isPepSelected ? pepInput?.value.trim() : aramexInput?.value.trim();
 
     return {
       orderId: `DT-${Date.now()}`,
@@ -589,6 +583,7 @@ const yoco = new YocoSDK({
     });
   }
 
+  // Bind Global UI Listeners
   menuToggle?.addEventListener('click', openMenu);
   closeMenu?.addEventListener('click', closeSideMenu);
   menuOverlay?.addEventListener('click', closeSideMenu);
@@ -659,91 +654,92 @@ const yoco = new YocoSDK({
   });
 
   // =========================================================
-  // UPDATED CHECKOUT FORM SUBMISSION WITH AWS & YOCO
+  // CHECKOUT FORM SUBMISSION (SAFE YOCO & AWS DYNAMODB INTEGRATION)
   // =========================================================
   const checkoutForm = document.getElementById('checkoutForm');
-checkoutForm?.addEventListener('submit', async (event) => {
-  event.preventDefault();
+  checkoutForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-  if (!validateCheckoutForm()) return;
+    if (!validateCheckoutForm()) return;
 
-  const totals = getTotals();
-  if (totals.total <= 0) {
-    setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
-    return;
-  }
-
-  const orderPayload = buildOrderPayload();
-  if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-  window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
-
-  const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
-  if (checkoutBtn) {
-    checkoutBtn.disabled = true;
-    checkoutBtn.textContent = 'Processing...';
-  }
-
-  setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
-
-  try {
-    // 1. Save order to AWS DynamoDB via API Gateway
-    if (API_GATEWAY_URL && API_GATEWAY_URL !== 'YOUR_API_GATEWAY_URL_HERE') {
-      const response = await fetch(API_GATEWAY_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload)
-      });
-
-      if (!response.ok) throw new Error('Failed to save order to AWS database.');
+    const totals = getTotals();
+    if (totals.total <= 0) {
+      setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
+      return;
     }
 
-    // 2. Yoco expects the payment amount in CENTS (e.g., R250.00 = 25000)
-    const amountInCents = Math.round(totals.total * 100);
+    if (typeof YocoSDK === 'undefined') {
+      setFeedback(checkoutMessage, 'Payment system loading failed. Please check your network.', 'error');
+      return;
+    }
 
-    setFeedback(checkoutMessage, 'Opening payment window...', 'success');
+    const orderPayload = buildOrderPayload();
+    if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
+    window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
 
-    // 3. Trigger Yoco Payment Popup with pre-filled dynamic total
-    yoco.showPopup({
-      amountInCents: amountInCents,
-      currency: 'ZAR',
-      name: 'Dusty Thrifts',
-      description: `Order #${orderPayload.orderId}`,
-      callback: async function (result) {
-        if (result.error) {
-          setFeedback(checkoutMessage, `Payment canceled or failed: ${result.error.message}`, 'error');
-          if (checkoutBtn) {
-            checkoutBtn.disabled = false;
-            checkoutBtn.textContent = originalBtnText;
-          }
-        } else {
-          // Payment successful / authorized
-          setFeedback(checkoutMessage, 'Payment successful! Thank you for your order.', 'success');
-          
-          // Clear basket & state
-          cart = [];
-          updateCartUI();
+    const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+    if (checkoutBtn) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = 'Processing...';
+    }
 
-          showToast('Order placed successfully!');
-          
-          if (checkoutBtn) {
-            checkoutBtn.disabled = false;
-            checkoutBtn.textContent = originalBtnText;
+    setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
+
+    try {
+      if (API_GATEWAY_URL) {
+        const response = await fetch(API_GATEWAY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+
+        if (!response.ok) throw new Error('Failed to save order to AWS database.');
+      }
+
+      const amountInCents = Math.round(totals.total * 100);
+      setFeedback(checkoutMessage, 'Opening payment window...', 'success');
+
+      // Initialize YocoSDK inside the handler safely
+      const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
+
+      yoco.showPopup({
+        amountInCents: amountInCents,
+        currency: 'ZAR',
+        name: 'Dusty Thrifts',
+        description: `Order #${orderPayload.orderId}`,
+        callback: async function (result) {
+          if (result.error) {
+            setFeedback(checkoutMessage, `Payment canceled or failed: ${result.error.message}`, 'error');
+            if (checkoutBtn) {
+              checkoutBtn.disabled = false;
+              checkoutBtn.textContent = originalBtnText;
+            }
+          } else {
+            setFeedback(checkoutMessage, 'Payment successful! Thank you for your order.', 'success');
+            cart = [];
+            updateCartUI();
+            showToast('Order placed successfully!');
+
+            if (checkoutBtn) {
+              checkoutBtn.disabled = false;
+              checkoutBtn.textContent = originalBtnText;
+            }
           }
         }
+      });
+
+    } catch (error) {
+      console.error(error);
+      setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
+      showToast('Error processing order.');
+      if (checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalBtnText;
       }
-    });
-
-  } catch (error) {
-    console.error(error);
-    setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
-    showToast('Error processing order.');
-    if (checkoutBtn) {
-      checkoutBtn.disabled = false;
-      checkoutBtn.textContent = originalBtnText;
     }
-  }
-});
+  });
 
+  // Contact Form Submission
   const contactForm = document.getElementById('contactform');
   const formMessage = document.getElementById('formMessage');
   const submitBtn = document.getElementById('submitBtn');
@@ -816,6 +812,7 @@ checkoutForm?.addEventListener('submit', async (event) => {
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  // Initialize Page Component States
   initialiseProductCards();
   initialiseCarousels();
   updateShippingFields();
