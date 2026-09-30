@@ -662,60 +662,87 @@ const yoco = new YocoSDK({
   // UPDATED CHECKOUT FORM SUBMISSION WITH AWS & YOCO
   // =========================================================
   const checkoutForm = document.getElementById('checkoutForm');
-  checkoutForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
+checkoutForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-    if (!validateCheckoutForm()) return;
+  if (!validateCheckoutForm()) return;
 
-    const orderPayload = buildOrderPayload();
-    if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-    window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
+  const totals = getTotals();
+  if (totals.total <= 0) {
+    setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
+    return;
+  }
 
-    const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+  const orderPayload = buildOrderPayload();
+  if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
+  window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
+
+  const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+  if (checkoutBtn) {
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Processing...';
+  }
+
+  setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
+
+  try {
+    // 1. Save order to AWS DynamoDB via API Gateway
+    if (API_GATEWAY_URL && API_GATEWAY_URL !== 'YOUR_API_GATEWAY_URL_HERE') {
+      const response = await fetch(API_GATEWAY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload)
+      });
+
+      if (!response.ok) throw new Error('Failed to save order to AWS database.');
+    }
+
+    // 2. Yoco expects the payment amount in CENTS (e.g., R250.00 = 25000)
+    const amountInCents = Math.round(totals.total * 100);
+
+    setFeedback(checkoutMessage, 'Opening payment window...', 'success');
+
+    // 3. Trigger Yoco Payment Popup with pre-filled dynamic total
+    yoco.showPopup({
+      amountInCents: amountInCents,
+      currency: 'ZAR',
+      name: 'Dusty Thrifts',
+      description: `Order #${orderPayload.orderId}`,
+      callback: async function (result) {
+        if (result.error) {
+          setFeedback(checkoutMessage, `Payment canceled or failed: ${result.error.message}`, 'error');
+          if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = originalBtnText;
+          }
+        } else {
+          // Payment successful / authorized
+          setFeedback(checkoutMessage, 'Payment successful! Thank you for your order.', 'success');
+          
+          // Clear basket & state
+          cart = [];
+          updateCartUI();
+
+          showToast('Order placed successfully!');
+          
+          if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = originalBtnText;
+          }
+        }
+      }
+    });
+
+  } catch (error) {
+    console.error(error);
+    setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
+    showToast('Error processing order.');
     if (checkoutBtn) {
-      checkoutBtn.disabled = true;
-      checkoutBtn.textContent = 'Processing...';
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalBtnText;
     }
-    
-    setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
-
-    try {
-      // Step 1: Save order to DynamoDB via AWS API Gateway
-      if (API_GATEWAY_URL && API_GATEWAY_URL !== 'YOUR_API_GATEWAY_URL_HERE') {
-        const response = await fetch(API_GATEWAY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderPayload)
-        });
-
-        if (!response.ok) throw new Error('Failed to save order to AWS database.');
-      }
-
-      // Step 2: Clear the basket since the order is confirmed
-      cart = [];
-      updateCartUI();
-
-      // Step 3: Redirect to Yoco for payment
-      if (PAYMENT_LINK && PAYMENT_LINK !== 'YOUR_YOCO_PAYMENT_LINK_HERE' && PAYMENT_LINK !== '') {
-        setFeedback(checkoutMessage, 'Redirecting to secure payment...', 'success');
-        window.location.href = PAYMENT_LINK;
-      } else {
-        setFeedback(checkoutMessage, 'Order saved! Connect your Yoco payment link to take live payments.', 'success');
-        showToast('Order saved successfully.');
-        console.log('DustyThrifts order payload:', orderPayload);
-      }
-
-    } catch (error) {
-      console.error(error);
-      setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
-      showToast('Error saving order.');
-    } finally {
-      if (checkoutBtn) {
-        checkoutBtn.disabled = false;
-        checkoutBtn.textContent = originalBtnText;
-      }
-    }
-  });
+  }
+});
 
   const contactForm = document.getElementById('contactform');
   const formMessage = document.getElementById('formMessage');
