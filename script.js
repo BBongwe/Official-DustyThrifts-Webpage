@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // CONFIGURATION: REPLACE THESE 2 URLS WITH YOUR ACTUAL LINKS
   // =========================================================
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
-  const PAYMENT_LINK = 'https://pay.yoco.com/dustythrifts';
+  const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24'; // Insert your pk_test_ or pk_live_ key here
+
+// Initialize Yoco SDK
+const yoco = new YocoSDK({
+  publicKey: YOCO_PUBLIC_KEY
+});
 
   let cart = loadCart();
   let toastTimer = null;
