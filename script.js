@@ -1,23 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // =========================================================================
+  // NOTE 1: CONFIGURATION & KEYS (LOOK HERE TO UPDATE ENDPOINTS OR PUBLIC KEYS)
+  // =========================================================================
   const CART_STORAGE_KEY = 'dustythriftsCart';
   const LAST_ORDER_STORAGE_KEY = 'dustythriftsLastOrder';
 
-  // =========================================================
-  // CONFIGURATION
-  // =========================================================
+  // AWS API Gateway endpoint for processing & saving order details
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
+  
+  // Yoco Live Public Key (Matches your Yoco Dashboard)
   const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24';
 
+  // =========================================================================
+  // STATE MANAGEMENT & DOM ELEMENTS
+  // =========================================================================
   let cart = loadCart();
   let toastTimer = null;
   let lastFocusedElement = null;
 
+  // Navigation Menu Elements
   const menuToggle = document.getElementById('menuToggle');
   const sideMenu = document.getElementById('sideMenu');
   const menuOverlay = document.getElementById('menuOverlay');
   const closeMenu = document.getElementById('closeMenu');
   const sideNavLinks = document.querySelectorAll('.nav-list-side a');
 
+  // Lightbox Viewer Elements
   const lightbox = document.getElementById('imageLightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxPrev = document.getElementById('lightboxPrev');
@@ -25,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxDetails = document.getElementById('lightboxDetails');
 
+  // Cart Drawer & Checkout Elements
   const openCartBtn = document.getElementById('openCart');
   const closeCartBtn = document.getElementById('closeCart');
   const cartDrawer = document.getElementById('cartDrawer');
@@ -40,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const checkoutMessage = document.getElementById('checkoutMessage');
   const orderPayloadInput = document.getElementById('orderPayload');
 
+  // Shipping Selection Inputs
   const pepRadio = document.querySelector('input[value="pep"]');
   const aramexRadio = document.querySelector('input[value="aramex"]');
   const pepField = document.getElementById('pepField');
@@ -51,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLightboxIndex = 0;
   let currentLightboxProduct = null;
 
+  // =========================================================================
+  // HELPER FUNCTIONS (FORMATTING & DATA PARSING)
+  // =========================================================================
   function formatPrice(amount) {
     return `R${Number(amount || 0).toFixed(0)}`;
   }
@@ -101,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3200);
   }
 
+  // =========================================================================
+  // NOTE 2: LOCAL STORAGE (BASKET & ORDER HISTORY MANAGEMENT)
+  // =========================================================================
   function loadCart() {
     try {
       const savedCart = window.localStorage.getItem(CART_STORAGE_KEY);
@@ -114,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
   }
 
+  // =========================================================================
+  // UI OVERLAY ACCESSIBILITY & LOCKS (MENU, LIGHTBOX, CART)
+  // =========================================================================
   function updatePageLock() {
     const hasOpenLayer =
       sideMenu?.classList.contains('active') ||
@@ -174,6 +193,9 @@ document.addEventListener('DOMContentLoaded', () => {
     restoreFocus();
   }
 
+  // =========================================================================
+  // LIGHTBOX MODAL HANDLERS
+  // =========================================================================
   function renderLightboxDetails() {
     if (!lightboxDetails || !currentLightboxProduct) return;
 
@@ -238,6 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
     showLightboxSlide(currentLightboxIndex - 1);
   }
 
+  // =========================================================================
+  // CHECKOUT & FORM VALIDATION HELPERS
+  // =========================================================================
   function setFieldError(field, errorId, message) {
     const errorEl = document.getElementById(errorId);
     if (field) field.classList.toggle('input-error', Boolean(message));
@@ -351,6 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return isValid;
   }
 
+  // =========================================================================
+  // DYNAMIC UI UPDATES (ADD BUTTONS, SHIPPING CALCULATOR & CART DISPLAY)
+  // =========================================================================
   function updateAddButtons() {
     document.querySelectorAll('.product-card').forEach(card => {
       const product = getProductFromCard(card);
@@ -583,7 +611,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Bind Global UI Listeners
+  // =========================================================================
+  // BIND GLOBAL UI EVENT LISTENERS
+  // =========================================================================
   menuToggle?.addEventListener('click', openMenu);
   closeMenu?.addEventListener('click', closeSideMenu);
   menuOverlay?.addEventListener('click', closeSideMenu);
@@ -653,9 +683,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // =========================================================
-  // CHECKOUT FORM SUBMISSION (SAFE YOCO & AWS DYNAMODB INTEGRATION)
-  // =========================================================
+  // =========================================================================
+  // NOTE 3: CHECKOUT FORM SUBMISSION & YOCO INTEGRATION (LOOK HERE FOR PAYMENTS)
+  // =========================================================================
   const checkoutForm = document.getElementById('checkoutForm');
   checkoutForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -668,8 +698,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Guard: Check if Yoco script tag in index.html loaded properly
     if (typeof YocoSDK === 'undefined') {
-      setFeedback(checkoutMessage, 'Payment system loading failed. Please check your network.', 'error');
+      setFeedback(checkoutMessage, 'Payment system loading failed. Please check your network or ad blocker.', 'error');
       return;
     }
 
@@ -686,6 +717,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
 
     try {
+      // Step A: Save Order details to AWS API Gateway -> Lambda -> DynamoDB
       if (API_GATEWAY_URL) {
         const response = await fetch(API_GATEWAY_URL, {
           method: 'POST',
@@ -696,10 +728,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!response.ok) throw new Error('Failed to save order to AWS database.');
       }
 
+      // Step B: Trigger Yoco Payment Popup Window
       const amountInCents = Math.round(totals.total * 100);
       setFeedback(checkoutMessage, 'Opening payment window...', 'success');
 
-      // Initialize YocoSDK inside the handler safely
       const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
 
       yoco.showPopup({
@@ -739,7 +771,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Contact Form Submission
+  // =========================================================================
+  // NOTE 4: CONTACT FORM SUBMISSION (AWS API GATEWAY ENDPOINT)
+  // =========================================================================
   const contactForm = document.getElementById('contactform');
   const formMessage = document.getElementById('formMessage');
   const submitBtn = document.getElementById('submitBtn');
@@ -809,6 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Footer Year Auto-Update
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
