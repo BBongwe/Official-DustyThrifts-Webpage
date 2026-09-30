@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
   
   // Yoco Live Public Key (Matches your Yoco Dashboard)
-  const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24';
+  //const YOCO_PUBLIC_KEY = 'pk_live_549ca2fb668zKwD30c24';
 
   // =========================================================================
   // STATE MANAGEMENT & DOM ELEMENTS
@@ -686,91 +686,60 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // NOTE 3: CHECKOUT FORM SUBMISSION & YOCO INTEGRATION (LOOK HERE FOR PAYMENTS)
   // =========================================================================
-  const checkoutForm = document.getElementById('checkoutForm');
-  checkoutForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  // =========================================================================
+// NOTE 3: CHECKOUT FORM SUBMISSION (HOSTED CHECKOUT REDIRECT)
+// =========================================================================
+const checkoutForm = document.getElementById('checkoutForm');
+checkoutForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-    if (!validateCheckoutForm()) return;
+  if (!validateCheckoutForm()) return;
 
-    const totals = getTotals();
-    if (totals.total <= 0) {
-      setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
-      return;
+  const totals = getTotals();
+  if (totals.total <= 0) {
+    setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
+    return;
+  }
+
+  const orderPayload = buildOrderPayload();
+  if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
+  window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
+
+  const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+  if (checkoutBtn) {
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Redirecting to Yoco...';
+  }
+
+  setFeedback(checkoutMessage, 'Preparing secure checkout...', 'success');
+
+  try {
+    // Send order to AWS API Gateway -> Lambda
+    const response = await fetch(API_GATEWAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderPayload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.redirectUrl) {
+      throw new Error(data.error || 'Failed to initialize payment session.');
     }
 
-    // Guard: Check if Yoco script tag in index.html loaded properly
-    if (typeof YocoSDK === 'undefined') {
-      setFeedback(checkoutMessage, 'Payment system loading failed. Please check your network or ad blocker.', 'error');
-      return;
-    }
+    // Redirect the customer directly to Yoco's hosted secure checkout page
+    window.location.href = data.redirectUrl;
 
-    const orderPayload = buildOrderPayload();
-    if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-    window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
-
-    const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
+  } catch (error) {
+    console.error(error);
+    setFeedback(checkoutMessage, 'There was an error creating your payment session. Please try again.', 'error');
+    showToast('Error processing order.');
     if (checkoutBtn) {
-      checkoutBtn.disabled = true;
-      checkoutBtn.textContent = 'Processing...';
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = originalBtnText;
     }
-
-    setFeedback(checkoutMessage, 'Saving your order securely...', 'success');
-
-    try {
-      // Step A: Save Order details to AWS API Gateway -> Lambda -> DynamoDB
-      if (API_GATEWAY_URL) {
-        const response = await fetch(API_GATEWAY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(orderPayload)
-        });
-
-        if (!response.ok) throw new Error('Failed to save order to AWS database.');
-      }
-
-      // Step B: Trigger Yoco Payment Popup Window
-      const amountInCents = Math.round(totals.total * 100);
-      setFeedback(checkoutMessage, 'Opening payment window...', 'success');
-
-      const yoco = new YocoSDK({ publicKey: YOCO_PUBLIC_KEY });
-
-      yoco.showPopup({
-        amountInCents: amountInCents,
-        currency: 'ZAR',
-        name: 'Dusty Thrifts',
-        description: `Order #${orderPayload.orderId}`,
-        callback: async function (result) {
-          if (result.error) {
-            setFeedback(checkoutMessage, `Payment canceled or failed: ${result.error.message}`, 'error');
-            if (checkoutBtn) {
-              checkoutBtn.disabled = false;
-              checkoutBtn.textContent = originalBtnText;
-            }
-          } else {
-            setFeedback(checkoutMessage, 'Payment successful! Thank you for your order.', 'success');
-            cart = [];
-            updateCartUI();
-            showToast('Order placed successfully!');
-
-            if (checkoutBtn) {
-              checkoutBtn.disabled = false;
-              checkoutBtn.textContent = originalBtnText;
-            }
-          }
-        }
-      });
-
-    } catch (error) {
-      console.error(error);
-      setFeedback(checkoutMessage, 'There was an error saving your order. Please try again.', 'error');
-      showToast('Error processing order.');
-      if (checkoutBtn) {
-        checkoutBtn.disabled = false;
-        checkoutBtn.textContent = originalBtnText;
-      }
-    }
-  });
-
+  }
+});
   // =========================================================================
   // NOTE 4: CONTACT FORM SUBMISSION (AWS API GATEWAY ENDPOINT)
   // =========================================================================
