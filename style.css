@@ -209,6 +209,18 @@ main {
   background-color: transparent;
 }
 
+.catalogue-message {
+  grid-column: 1 / -1;
+  margin: 1rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.catalogue-message.error {
+  color: var(--accent-color);
+}
+
 .product-card {
   background: var(--bg-color);
   border: 1px solid var(--border-color);
@@ -778,7 +790,6 @@ main {
 .contact-section {
   max-width: 500px;
   margin: 0 auto;
-  border-bottom: none;
 }
 
 .btn-primary {
@@ -790,6 +801,67 @@ main {
   font-weight: 600;
   cursor: pointer;
   box-shadow: 4px 4px 0 var(--accent-color);
+}
+
+/* Legal Modal */
+.legal-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(42, 40, 36, 0.55);
+  z-index: 4500;
+}
+
+.legal-modal.active {
+  display: flex;
+}
+
+.legal-modal-panel {
+  position: relative;
+  width: min(calc(100vw - 2rem), 520px);
+  max-height: min(82vh, 640px);
+  overflow-y: auto;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 6px 6px 0 var(--accent-color);
+  padding: 1.35rem;
+}
+
+.legal-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-color);
+  background: var(--text-main);
+  color: var(--bg-color);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.legal-modal h3 {
+  margin: 0 2.5rem 1rem 0;
+  font-family: var(--font-serif);
+  font-size: 1.45rem;
+}
+
+.legal-modal-body ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.legal-modal-body li {
+  color: #504c44;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .site-toast {
@@ -822,6 +894,30 @@ main {
   font-size: 0.75rem;
   border-top: 1px solid var(--border-color);
   background: var(--bg-color);
+}
+
+.footer-legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-legal-links button {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent-color);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.site-footer p {
+  margin: 0;
 }
 
 /* Laptop & Desktop Optimization */
