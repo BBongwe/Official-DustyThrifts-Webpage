@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // =========================================================================
   // NOTE 1: CONFIGURATION & KEYS (LOOK HERE TO UPDATE ENDPOINTS OR PUBLIC KEYS)
   // =========================================================================
   const CART_STORAGE_KEY = 'dustythriftsCart';
   const LAST_ORDER_STORAGE_KEY = 'dustythriftsLastOrder';
+  const CATALOGUE_URL = 'catalogue.json';
 
   // AWS API Gateway endpoint for processing & saving order details
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
@@ -48,6 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const shippingBanner = document.getElementById('shippingBanner');
   const checkoutMessage = document.getElementById('checkoutMessage');
   const orderPayloadInput = document.getElementById('orderPayload');
+  const productsGrid = document.getElementById('productsGrid');
+  const legalModal = document.getElementById('legalModal');
+  const legalModalTitle = document.getElementById('legalModalTitle');
+  const legalModalBody = document.getElementById('legalModalBody');
+  const legalModalClose = document.getElementById('legalModalClose');
+  const legalModalTriggers = document.querySelectorAll('[data-legal-modal]');
 
   // Shipping Selection Inputs
   const pepRadio = document.querySelector('input[value="pep"]');
@@ -60,12 +67,43 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentLightboxImages = [];
   let currentLightboxIndex = 0;
   let currentLightboxProduct = null;
+  let catalogueProducts = [];
+  const legalModalContent = {
+    privacy: {
+      title: 'Privacy Policy',
+      items: [
+        'We collect only essential details for order fulfillment: Full Name, Phone/WhatsApp Number, and Delivery details (PEP Paxi store or Aramex address).',
+        'This information is used strictly for order tracking, communication, and internal business logs.',
+        'NO data is sold, traded, or shared with third parties.',
+        'Bank cards and sensitive financial details are NOT handled or stored by us; they are securely processed via Yoco.'
+      ]
+    },
+    terms: {
+      title: 'Terms & Conditions',
+      items: [
+        'All items are curated, pre-loved vintage pieces with limited quantities, one per item.',
+        'Prices are in ZAR. Payments are processed securely through Yoco.',
+        'Shipping is available via PEP Paxi and Aramex Courier across South Africa.',
+        'Returns & Refunds: Refunds are accepted on a case-by-case basis. Return courier/shipping fees are the responsibility of the customer, or customers can choose to receive a store voucher for their next purchase.'
+      ]
+    }
+  };
 
   // =========================================================================
   // HELPER FUNCTIONS (FORMATTING & DATA PARSING)
   // =========================================================================
   function formatPrice(amount) {
     return `R${Number(amount || 0).toFixed(0)}`;
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
   }
 
   function normaliseStatus(status) {
@@ -80,6 +118,157 @@ document.addEventListener('DOMContentLoaded', () => {
     return normaliseStatus(status) === 'sold';
   }
 
+  function normaliseProduct(product, index) {
+    const fallbackId = String.fromCharCode(97 + index);
+    const images = Array.isArray(product.images) ? product.images : [];
+
+    return {
+      id: String(product.id || fallbackId).trim().toLowerCase(),
+      legacyIds: Array.isArray(product.legacyIds) ? product.legacyIds.map(id => String(id).trim()) : [],
+      title: String(product.title || 'Untitled Item').trim(),
+      displayTitle: String(product.displayTitle || product.title || 'Untitled Item').trim(),
+      price: Number(product.price || 0),
+      size: String(product.size || '').trim(),
+      status: normaliseStatus(product.status),
+      measurements: String(product.measurements || '').trim(),
+      fabric: String(product.fabric || '').trim(),
+      condition: String(product.condition || '').trim(),
+      images: images
+        .map(image => {
+          if (typeof image === 'string') {
+            return { src: image.trim(), alt: `${product.title || 'Product'} image` };
+          }
+
+          return {
+            src: String(image?.src || '').trim(),
+            alt: String(image?.alt || product.title || 'Product image').trim()
+          };
+        })
+        .filter(image => image.src !== '')
+    };
+  }
+
+  function getProductSizeText(size) {
+    if (!size) return 'Size: To be added';
+    return size.toLowerCase().startsWith('size') || size.toLowerCase() === 'one size' ? size : `Size: ${size}`;
+  }
+
+  function getPrimaryImage(product) {
+    return product.images[0]?.src || '';
+  }
+
+  function findCatalogueProductById(id) {
+    const lookupId = String(id || '').trim();
+    return catalogueProducts.find(product => product.id === lookupId || product.legacyIds.includes(lookupId));
+  }
+
+  function renderCatalogueMessage(message, type = '') {
+    if (!productsGrid) return;
+    productsGrid.innerHTML = `<p class="catalogue-message ${type}">${escapeHTML(message)}</p>`;
+  }
+
+  function createProductCard(product) {
+    const article = document.createElement('article');
+    article.className = 'product-card';
+    article.dataset.id = product.id;
+    article.dataset.title = product.title;
+    article.dataset.displayTitle = product.displayTitle;
+    article.dataset.price = String(product.price);
+    article.dataset.size = product.size;
+    article.dataset.status = product.status;
+    article.dataset.measurements = product.measurements;
+    article.dataset.fabric = product.fabric;
+    article.dataset.condition = product.condition;
+
+    const imageMarkup = product.images.map((image, index) => `
+      <img src="${escapeHTML(image.src)}" alt="${escapeHTML(image.alt)}" class="${index === 0 ? 'active' : ''}" loading="lazy" decoding="async" width="600" height="800" />
+    `).join('');
+
+    article.innerHTML = `
+      <div class="carousel" data-carousel aria-label="Product images for ${escapeHTML(product.title)}">
+        <div class="carousel-slides">
+          ${imageMarkup}
+        </div>
+        <button type="button" class="carousel-btn next" aria-label="Next image">&rsaquo;</button>
+        <div class="carousel-dots" aria-hidden="true"></div>
+      </div>
+      <div class="product-info">
+        <div class="product-header-row">
+          <h4 class="product-title">${escapeHTML(product.displayTitle)}</h4>
+          <span class="product-price">${formatPrice(product.price)}</span>
+        </div>
+        <div class="product-meta-row">
+          <span class="product-size">${escapeHTML(getProductSizeText(product.size))}</span>
+          <span class="product-status">${escapeHTML(displayStatus(product.status))}</span>
+        </div>
+        <div class="product-action-row">
+          <button type="button" class="btn-add-cart" aria-label="Add ${escapeHTML(product.title)} to basket">+</button>
+        </div>
+      </div>
+    `;
+
+    return article;
+  }
+
+  function renderCatalogue(products) {
+    if (!productsGrid) return;
+
+    productsGrid.innerHTML = '';
+
+    if (products.length === 0) {
+      renderCatalogueMessage('No products are listed yet.');
+      return;
+    }
+
+    products.forEach(product => {
+      productsGrid.appendChild(createProductCard(product));
+    });
+  }
+
+  async function loadCatalogue() {
+    if (!productsGrid) return;
+
+    try {
+      const response = await fetch(CATALOGUE_URL, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Catalogue request failed: ${response.status}`);
+
+      const catalogue = await response.json();
+      const rawProducts = Array.isArray(catalogue) ? catalogue : catalogue.products;
+      if (!Array.isArray(rawProducts)) throw new Error('Catalogue must contain a products array.');
+
+      catalogueProducts = rawProducts.map(normaliseProduct).filter(product => product.id && product.title);
+      renderCatalogue(catalogueProducts);
+    } catch (error) {
+      console.error(error);
+      renderCatalogueMessage('The catalogue could not be loaded. Please refresh the page.', 'error');
+    }
+  }
+
+  function syncCartWithCatalogue() {
+    if (catalogueProducts.length === 0) return;
+
+    cart = cart
+      .map(item => {
+        const product = findCatalogueProductById(item.id);
+        if (!product || isSold(product.status)) return null;
+
+        return {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          size: product.size,
+          status: product.status,
+          measurements: product.measurements,
+          fabric: product.fabric,
+          condition: product.condition,
+          image: getPrimaryImage(product)
+        };
+      })
+      .filter(Boolean);
+
+    saveCart();
+  }
+
   function getImageSrc(img) {
     if (!img) return '';
     return (img.getAttribute('src') || img.dataset.src || '').trim();
@@ -92,6 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return {
       id: rawId.trim(),
       title: card.dataset.title || 'Untitled Item',
+      displayTitle: card.dataset.displayTitle || card.dataset.title || 'Untitled Item',
       price: Number.parseFloat(card.dataset.price || '0'),
       size: card.dataset.size || '',
       status: normaliseStatus(card.dataset.status),
@@ -127,7 +317,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function saveCart() {
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch (error) {
+      // Keep the shop usable even if a browser blocks local storage.
+    }
   }
 
   // =========================================================================
@@ -137,7 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const hasOpenLayer =
       sideMenu?.classList.contains('active') ||
       cartDrawer?.classList.contains('active') ||
-      lightbox?.classList.contains('active');
+      lightbox?.classList.contains('active') ||
+      legalModal?.classList.contains('active');
 
     document.body.classList.toggle('no-scroll', Boolean(hasOpenLayer));
   }
@@ -258,6 +453,36 @@ document.addEventListener('DOMContentLoaded', () => {
   function prevLightboxSlide() {
     if (currentLightboxImages.length === 0) return;
     showLightboxSlide(currentLightboxIndex - 1);
+  }
+
+  // =========================================================================
+  // LEGAL MODAL HANDLERS
+  // =========================================================================
+  function openLegalModal(type) {
+    const content = legalModalContent[type];
+    if (!legalModal || !legalModalTitle || !legalModalBody || !content) return;
+
+    rememberFocus();
+    legalModalTitle.textContent = content.title;
+    legalModalBody.innerHTML = `
+      <ul>
+        ${content.items.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
+      </ul>
+    `;
+    legalModal.classList.add('active');
+    legalModal.setAttribute('aria-hidden', 'false');
+    legalModalClose?.focus();
+    updatePageLock();
+  }
+
+  function closeLegalModal() {
+    if (!legalModal || !legalModal.classList.contains('active')) return;
+
+    legalModal.classList.remove('active');
+    legalModal.setAttribute('aria-hidden', 'true');
+    if (legalModalBody) legalModalBody.innerHTML = '';
+    updatePageLock();
+    restoreFocus();
   }
 
   // =========================================================================
@@ -637,6 +862,17 @@ document.addEventListener('DOMContentLoaded', () => {
   pepRadio?.addEventListener('change', updateShippingFields);
   aramexRadio?.addEventListener('change', updateShippingFields);
 
+  legalModalTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      openLegalModal(trigger.dataset.legalModal);
+    });
+  });
+
+  legalModalClose?.addEventListener('click', closeLegalModal);
+  legalModal?.addEventListener('click', (event) => {
+    if (event.target === legalModal) closeLegalModal();
+  });
+
   lightbox?.addEventListener('click', (event) => {
     if (event.target === lightbox) closeLightbox();
   });
@@ -673,6 +909,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeLightbox();
+      closeLegalModal();
       closeCart();
       closeSideMenu();
     }
@@ -703,7 +940,11 @@ checkoutForm?.addEventListener('submit', async (event) => {
 
   const orderPayload = buildOrderPayload();
   if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-  window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
+  try {
+    window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
+  } catch (error) {
+    // Checkout can continue without saving a local copy of the order.
+  }
 
   const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
   if (checkoutBtn) {
@@ -817,6 +1058,8 @@ checkoutForm?.addEventListener('submit', async (event) => {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // Initialize Page Component States
+  await loadCatalogue();
+  syncCartWithCatalogue();
   initialiseProductCards();
   initialiseCarousels();
   updateShippingFields();
