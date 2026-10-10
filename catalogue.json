@@ -1,0 +1,220 @@
+{
+  "products": [
+    {
+      "id": "a",
+      "legacyIds": ["1"],
+      "title": "Big Day Out Tee",
+      "displayTitle": "Big Day Out Tee",
+      "price": 280,
+      "size": "L",
+      "status": "sold",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "tee.jpeg", "alt": "Big Day Out Tee front" },
+        { "src": "paris.jpeg", "alt": "Big Day Out Tee alternate view" },
+        { "src": "sweater.jpeg", "alt": "Big Day Out Tee detail view" },
+        { "src": "tee.jpeg", "alt": "Big Day Out Tee extra view" }
+      ]
+    },
+    {
+      "id": "b",
+      "legacyIds": ["2"],
+      "title": "Vintage Knit Vest",
+      "displayTitle": "Vintage Knit Vest",
+      "price": 320,
+      "size": "M",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "jerseys.jpeg", "alt": "Vintage Knit Vest front" },
+        { "src": "jersey1.jpeg", "alt": "Vintage Knit Vest alternate view" },
+        { "src": "jersey3.jpeg", "alt": "Vintage Knit Vest detail view" },
+        { "src": "jerseys.jpeg", "alt": "Vintage Knit Vest extra view" }
+      ]
+    },
+    {
+      "id": "c",
+      "legacyIds": ["3"],
+      "title": "Skull Pendant Chain",
+      "displayTitle": "Skull Chain",
+      "price": 180,
+      "size": "S",
+      "status": "available",
+      "measurements": "Length: add measurement",
+      "fabric": "Add material details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "accessories1.jpeg", "alt": "Skull Pendant Chain front" },
+        { "src": "accessories.jpeg", "alt": "Skull Pendant Chain alternate view" },
+        { "src": "accessories1.jpeg", "alt": "Skull Pendant Chain detail view" },
+        { "src": "accessories.jpeg", "alt": "Skull Pendant Chain extra view" }
+      ]
+    },
+    {
+      "id": "d",
+      "legacyIds": ["4"],
+      "title": "Knitted Vintage Top",
+      "displayTitle": "Knitted Vintage Top",
+      "price": 350,
+      "size": "M",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "jersey1.jpeg", "alt": "Knitted Vintage Top front" },
+        { "src": "jerseys.jpeg", "alt": "Knitted Vintage Top alternate view" },
+        { "src": "jersey3.jpeg", "alt": "Knitted Vintage Top detail view" },
+        { "src": "jersey1.jpeg", "alt": "Knitted Vintage Top extra view" }
+      ]
+    },
+    {
+      "id": "e",
+      "legacyIds": ["5"],
+      "title": "Black Cargo Pants",
+      "displayTitle": "Black Cargo Pants",
+      "price": 420,
+      "size": "XL",
+      "status": "available",
+      "measurements": "Waist: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "cargo.jpeg", "alt": "Black Cargo Pants front" },
+        { "src": "pants.jpeg", "alt": "Black Cargo Pants alternate view" },
+        { "src": "cargo.jpeg", "alt": "Black Cargo Pants detail view" },
+        { "src": "pants.jpeg", "alt": "Black Cargo Pants extra view" }
+      ]
+    },
+    {
+      "id": "f",
+      "legacyIds": ["6"],
+      "title": "Ash Greek Jacket",
+      "displayTitle": "Ash Greek Jacket",
+      "price": 480,
+      "size": "XXL",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "jersey3.jpeg", "alt": "Ash Greek Jacket front" },
+        { "src": "jersey1.jpeg", "alt": "Ash Greek Jacket alternate view" },
+        { "src": "jerseys.jpeg", "alt": "Ash Greek Jacket detail view" },
+        { "src": "jersey3.jpeg", "alt": "Ash Greek Jacket extra view" }
+      ]
+    },
+    {
+      "id": "g",
+      "legacyIds": ["7"],
+      "title": "Lulu Paris Graphic Tee",
+      "displayTitle": "Lulu Paris Tee",
+      "price": 250,
+      "size": "S",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "paris.jpeg", "alt": "Lulu Paris Graphic Tee front" },
+        { "src": "tee.jpeg", "alt": "Lulu Paris Graphic Tee alternate view" },
+        { "src": "sweater.jpeg", "alt": "Lulu Paris Graphic Tee detail view" },
+        { "src": "paris.jpeg", "alt": "Lulu Paris Graphic Tee extra view" }
+      ]
+    },
+    {
+      "id": "h",
+      "legacyIds": ["8"],
+      "title": "Twinlife Sweater",
+      "displayTitle": "Twinlife Sweater",
+      "price": 380,
+      "size": "L",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "sweater.jpeg", "alt": "Twinlife Sweater front" },
+        { "src": "jersey3.jpeg", "alt": "Twinlife Sweater alternate view" },
+        { "src": "jerseys.jpeg", "alt": "Twinlife Sweater detail view" },
+        { "src": "sweater.jpeg", "alt": "Twinlife Sweater extra view" }
+      ]
+    },
+    {
+      "id": "i",
+      "legacyIds": ["9"],
+      "title": "Vintage Pants",
+      "displayTitle": "Vintage Pants",
+      "price": 360,
+      "size": "M",
+      "status": "available",
+      "measurements": "Waist: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "pants.jpeg", "alt": "Vintage Pants front" },
+        { "src": "cargo.jpeg", "alt": "Vintage Pants alternate view" },
+        { "src": "pants.jpeg", "alt": "Vintage Pants detail view" },
+        { "src": "cargo.jpeg", "alt": "Vintage Pants extra view" }
+      ]
+    },
+    {
+      "id": "j",
+      "legacyIds": ["10"],
+      "title": "Vintage Accessories Set",
+      "displayTitle": "Accessories Set",
+      "price": 160,
+      "size": "One Size",
+      "status": "available",
+      "measurements": "Add accessory measurements",
+      "fabric": "Add material details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "accessories.jpeg", "alt": "Vintage Accessories Set front" },
+        { "src": "accessories1.jpeg", "alt": "Vintage Accessories Set alternate view" },
+        { "src": "accessories.jpeg", "alt": "Vintage Accessories Set detail view" },
+        { "src": "accessories1.jpeg", "alt": "Vintage Accessories Set extra view" }
+      ]
+    },
+    {
+      "id": "k",
+      "legacyIds": ["11"],
+      "title": "Vintage Jersey",
+      "displayTitle": "Vintage Jersey",
+      "price": 390,
+      "size": "L",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "jersey1.jpeg", "alt": "Vintage Jersey front" },
+        { "src": "jerseys.jpeg", "alt": "Vintage Jersey alternate view" },
+        { "src": "jersey3.jpeg", "alt": "Vintage Jersey detail view" },
+        { "src": "jersey1.jpeg", "alt": "Vintage Jersey extra view" }
+      ]
+    },
+    {
+      "id": "l",
+      "legacyIds": ["12"],
+      "title": "Utility Cargo Pants",
+      "displayTitle": "Utility Cargo Pants",
+      "price": 410,
+      "size": "L",
+      "status": "available",
+      "measurements": "Waist: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "Good vintage condition",
+      "images": [
+        { "src": "cargo.jpeg", "alt": "Utility Cargo Pants front" },
+        { "src": "pants.jpeg", "alt": "Utility Cargo Pants alternate view" },
+        { "src": "cargo.jpeg", "alt": "Utility Cargo Pants detail view" },
+        { "src": "pants.jpeg", "alt": "Utility Cargo Pants extra view" }
+      ]
+    }
+  ]
+}
