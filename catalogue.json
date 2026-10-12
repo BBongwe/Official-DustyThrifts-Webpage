@@ -9,89 +9,17 @@
       "size": "L",
       "status": "sold",
       "measurements": "Chest: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
+      "fabric": "Cotton",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "tee.jpeg", "alt": "Big Day Out Tee front" },
-        { "src": "paris.jpeg", "alt": "Big Day Out Tee alternate view" },
-        { "src": "sweater.jpeg", "alt": "Big Day Out Tee detail view" },
-        { "src": "tee.jpeg", "alt": "Big Day Out Tee extra view" }
+        { "src": "a1.webp", "alt": "Big Day Out Tee front" },
+        { "src": "a2.webp", "alt": "Big Day Out Tee alternate view" },
+        { "src": "a3.webp", "alt": "Big Day Out Tee detail view" },
+        { "src": "a4.webp", "alt": "Big Day Out Tee extra view" }
       ]
     },
     {
       "id": "b",
-      "legacyIds": ["2"],
-      "title": "Vintage Knit Vest",
-      "displayTitle": "Vintage Knit Vest",
-      "price": 320,
-      "size": "M",
-      "status": "available",
-      "measurements": "Chest: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
-      "condition": "Good vintage condition",
-      "images": [
-        { "src": "jerseys.jpeg", "alt": "Vintage Knit Vest front" },
-        { "src": "jersey1.jpeg", "alt": "Vintage Knit Vest alternate view" },
-        { "src": "jersey3.jpeg", "alt": "Vintage Knit Vest detail view" },
-        { "src": "jerseys.jpeg", "alt": "Vintage Knit Vest extra view" }
-      ]
-    },
-    {
-      "id": "c",
-      "legacyIds": ["3"],
-      "title": "Skull Pendant Chain",
-      "displayTitle": "Skull Chain",
-      "price": 180,
-      "size": "S",
-      "status": "available",
-      "measurements": "Length: add measurement",
-      "fabric": "Add material details",
-      "condition": "Good vintage condition",
-      "images": [
-        { "src": "accessories1.jpeg", "alt": "Skull Pendant Chain front" },
-        { "src": "accessories.jpeg", "alt": "Skull Pendant Chain alternate view" },
-        { "src": "accessories1.jpeg", "alt": "Skull Pendant Chain detail view" },
-        { "src": "accessories.jpeg", "alt": "Skull Pendant Chain extra view" }
-      ]
-    },
-    {
-      "id": "d",
-      "legacyIds": ["4"],
-      "title": "Knitted Vintage Top",
-      "displayTitle": "Knitted Vintage Top",
-      "price": 350,
-      "size": "M",
-      "status": "available",
-      "measurements": "Chest: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
-      "condition": "Good vintage condition",
-      "images": [
-        { "src": "jersey1.jpeg", "alt": "Knitted Vintage Top front" },
-        { "src": "jerseys.jpeg", "alt": "Knitted Vintage Top alternate view" },
-        { "src": "jersey3.jpeg", "alt": "Knitted Vintage Top detail view" },
-        { "src": "jersey1.jpeg", "alt": "Knitted Vintage Top extra view" }
-      ]
-    },
-    {
-      "id": "e",
-      "legacyIds": ["5"],
-      "title": "Black Cargo Pants",
-      "displayTitle": "Black Cargo Pants",
-      "price": 420,
-      "size": "XL",
-      "status": "available",
-      "measurements": "Waist: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
-      "condition": "Good vintage condition",
-      "images": [
-        { "src": "cargo.jpeg", "alt": "Black Cargo Pants front" },
-        { "src": "pants.jpeg", "alt": "Black Cargo Pants alternate view" },
-        { "src": "cargo.jpeg", "alt": "Black Cargo Pants detail view" },
-        { "src": "pants.jpeg", "alt": "Black Cargo Pants extra view" }
-      ]
-    },
-    {
-      "id": "f",
       "legacyIds": ["6"],
       "title": "Ash Greek Jacket",
       "displayTitle": "Ash Greek Jacket",
@@ -99,74 +27,166 @@
       "size": "XXL",
       "status": "available",
       "measurements": "Chest: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
+      "fabric": "-",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "jersey3.jpeg", "alt": "Ash Greek Jacket front" },
-        { "src": "jersey1.jpeg", "alt": "Ash Greek Jacket alternate view" },
-        { "src": "jerseys.jpeg", "alt": "Ash Greek Jacket detail view" },
-        { "src": "jersey3.jpeg", "alt": "Ash Greek Jacket extra view" }
+        { "src": "b1.webp", "alt": "Ash Greek Jacket front" },
+        { "src": "b2.webp", "alt": "Ash Greek Jacket alternate view" },
+        { "src": "b3.webp", "alt": "Ash Greek Jacket detail view" },
+        { "src": "b4.webp", "alt": "Ash Greek Jacket extra view" }
       ]
     },
+    
+    
     {
-      "id": "g",
-      "legacyIds": ["7"],
-      "title": "Lulu Paris Graphic Tee",
-      "displayTitle": "Lulu Paris Tee",
-      "price": 250,
+      "id": "c",
+      "legacyIds": ["3"],
+      "title": "Blue HnM knit vest",
+      "displayTitle": "Skull Chain",
+      "price": 180,
       "size": "S",
       "status": "available",
-      "measurements": "Chest: add measurement | Length: add measurement",
-      "fabric": "Add fabric details",
-      "condition": "Good vintage condition",
+      "measurements": "Length: ",
+      "fabric": "Cotton",
+      "condition": "Excellent vintage condition",
       "images": [
-        { "src": "paris.jpeg", "alt": "Lulu Paris Graphic Tee front" },
-        { "src": "tee.jpeg", "alt": "Lulu Paris Graphic Tee alternate view" },
-        { "src": "sweater.jpeg", "alt": "Lulu Paris Graphic Tee detail view" },
-        { "src": "paris.jpeg", "alt": "Lulu Paris Graphic Tee extra view" }
+        { "src": "c1.webp", "alt": "Skull Pendant Chain front" },
+        { "src": "c2.webp", "alt": "Skull Pendant Chain alternate view" },
+        { "src": "c3.webp", "alt": "Skull Pendant Chain detail view" },
+        { "src": "c4.webp", "alt": "Skull Pendant Chain extra view" }
       ]
     },
     {
-      "id": "h",
-      "legacyIds": ["8"],
-      "title": "Twinlife Sweater",
-      "displayTitle": "Twinlife Sweater",
-      "price": 380,
+      "id": "d",
+      "legacyIds": ["4"],
+      "title": "Mocha Brown Vintage suit",
+      "displayTitle": "Mocha Brown Vintage suit",
+      "price": 350,
+      "size": "M",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Cotton",
+      "condition": "8/10",
+      "images": [
+        { "src": "d1.webp", "alt": "Mocha Brown Vintage suit front" },
+        { "src": "d2.webp", "alt": "Mocha Brown Vintage suit alternate view" },
+        { "src": "d3.webp", "alt": "Mocha Brown Vintage suit detail view" },
+        { "src": "d4.webp", "alt": "Mocha Brown Vintage suit extra view" }
+      ]
+    },
+    {
+      "id": "e",
+      "legacyIds": ["5"],
+      "title": "Red Vest",
+      "displayTitle": "Red Vest",
+      "price": 120,
+      "size": "XL",
+      "status": "available",
+      "measurements": "Waist: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "9/10",
+      "images": [
+        { "src": "e1.webp", "alt": "Red Vest front" },
+        { "src": "e2.webp", "alt": "Red Vest alternate view" },
+        { "src": "e3.webp", "alt": "Red Vest detail view" },
+        { "src": "e4.webp", "alt": "Red Vest extra view" }
+      ]
+    },
+    {
+      "id": "b",
+      "legacyIds": ["6"],
+      "title": "Snakes and arrows long sleeve",
+      "displayTitle": "Snakes and arrows long sleeve",
+      "price": 150,
       "size": "L",
       "status": "available",
       "measurements": "Chest: add measurement | Length: add measurement",
       "fabric": "Add fabric details",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "sweater.jpeg", "alt": "Twinlife Sweater front" },
-        { "src": "jersey3.jpeg", "alt": "Twinlife Sweater alternate view" },
-        { "src": "jerseys.jpeg", "alt": "Twinlife Sweater detail view" },
-        { "src": "sweater.jpeg", "alt": "Twinlife Sweater extra view" }
+        { "src": "p1.webp", "alt": "Snakes and arrows long sleeve front" },
+        { "src": "p2.webp", "alt": "Snakes and arrows long sleeve alternate view" },
+        { "src": "p3.webp", "alt": "Snakes and arrows long sleeve detail view" },
+        { "src": "p4.webp", "alt": "Snakes and arrows long sleeve extra view" }
       ]
     },
     {
-      "id": "i",
-      "legacyIds": ["9"],
-      "title": "Vintage Pants",
-      "displayTitle": "Vintage Pants",
-      "price": 360,
+      "id": "g",
+      "legacyIds": ["7"],
+      "title": "Coach Willow Tote in polished pebble leather",
+      "displayTitle": "Coach Willow Tote",
+      "price": 8000,
       "size": "M",
+      "status": "available",
+      "measurements": "",
+      "fabric": "Leather",
+      "condition": "10/10",
+      "images": [
+        { "src": "g1.webp", "alt": "Coach Willow Tote front" },
+        { "src": "g2.webp", "alt": "Coach Willow Tote alternate view" },
+        { "src": "g3.webp", "alt": "Coach Willow Tote detail view" },
+        { "src": "g4.webp", "alt": "Coach Willow Tote extra view" }
+      ]
+    },
+    {
+      "id": "h",
+      "legacyIds": ["8"],
+      "title": "Gore-Tex Schöffel",
+      "displayTitle": "Gore-Tex Schöffel",
+      "price": 2000,
+      "size": "XL",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "9/10",
+      "images": [
+        { "src": "h1.webp", "alt": "Gore-Tex Schöffel front" },
+        { "src": "h2.webp", "alt": "Gore-Tex Schöffel alternate view" },
+        { "src": "h3.webp", "alt": "Gore-Tex Schöffel detail view" },
+        { "src": "h4.webp", "alt": "Gore-Tex Schöffel extra view" }
+      ]
+    },
+    {
+      "id": "j",
+      "legacyIds": ["9"],
+      "title": "Cotton On Ribbed Cardigan. Lightweight semi sheer fabric.",
+      "displayTitle": "Cotton On Ribbed Cardigan",
+      "price": 140,
+      "size": "2",
       "status": "available",
       "measurements": "Waist: add measurement | Length: add measurement",
       "fabric": "Add fabric details",
-      "condition": "Good vintage condition",
+      "condition": "9/10",
       "images": [
-        { "src": "pants.jpeg", "alt": "Vintage Pants front" },
-        { "src": "cargo.jpeg", "alt": "Vintage Pants alternate view" },
-        { "src": "pants.jpeg", "alt": "Vintage Pants detail view" },
-        { "src": "cargo.jpeg", "alt": "Vintage Pants extra view" }
+        { "src": "j1.webp", "alt": "Cotton On Ribbed Cardigan front" },
+        { "src": "j2.webp", "alt": "Cotton On Ribbed Cardigan alternate view" },
+        { "src": "j3.webp", "alt": "Cotton On Ribbed Cardigan detail view" },
+        { "src": "j4.webp", "alt": "Cotton On Ribbed Cardigan extra view" }
+      ]
+    },
+    {
+      "id": "k",
+      "legacyIds": ["2"],
+      "title": "H&M court heels. Patent finish with adjustable straps.",
+      "displayTitle": "H&M court heels",
+      "price": 390,
+      "size": "36/3",
+      "status": "available",
+      "measurements": "Chest: add measurement | Length: add measurement",
+      "fabric": "Add fabric details",
+      "condition": "9.5/10",
+      "images": [
+        { "src": "k1.webp", "alt": "H&M court heels front" },
+        { "src": "k2.webp", "alt": "H&M court heels alternate view" },
+        { "src": "k3.webp", "alt": "H&M court heels detail view" },
+        { "src": "k4.webp", "alt": "H&M court heels extra view" }
       ]
     },
     {
       "id": "j",
       "legacyIds": ["10"],
-      "title": "Vintage Accessories Set",
-      "displayTitle": "Accessories Set",
+      "title": "Vintage Accessories Pearls",
+      "displayTitle": "Vintage Accessories Pearls",
       "price": 160,
       "size": "One Size",
       "status": "available",
@@ -174,46 +194,46 @@
       "fabric": "Add material details",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "accessories.jpeg", "alt": "Vintage Accessories Set front" },
-        { "src": "accessories1.jpeg", "alt": "Vintage Accessories Set alternate view" },
-        { "src": "accessories.jpeg", "alt": "Vintage Accessories Set detail view" },
-        { "src": "accessories1.jpeg", "alt": "Vintage Accessories Set extra view" }
+        { "src": "l1.webp", "alt": "Vintage Accessories Set front" },
+        { "src": "l2.webp", "alt": "Vintage Accessories Set alternate view" },
+        { "src": "l3.webp", "alt": "Vintage Accessories Set detail view" },
+        { "src": "l4.webp", "alt": "Vintage Accessories Set extra view" }
       ]
     },
     {
       "id": "k",
       "legacyIds": ["11"],
-      "title": "Vintage Jersey",
-      "displayTitle": "Vintage Jersey",
-      "price": 390,
+      "title": "Beige Sunderland of Scotland Vintage Vest",
+      "displayTitle": "Beige Sunderland of Scotland Vintage Vest",
+      "price": 110,
       "size": "L",
       "status": "available",
       "measurements": "Chest: add measurement | Length: add measurement",
       "fabric": "Add fabric details",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "jersey1.jpeg", "alt": "Vintage Jersey front" },
-        { "src": "jerseys.jpeg", "alt": "Vintage Jersey alternate view" },
-        { "src": "jersey3.jpeg", "alt": "Vintage Jersey detail view" },
-        { "src": "jersey1.jpeg", "alt": "Vintage Jersey extra view" }
+        { "src": "m3.webp", "alt": "Beige Sunderland of Scotland Vintage Vest front" },
+        { "src": "m1.webp", "alt": "Beige Sunderland of Scotland Vintage Vest alternate view" },
+        { "src": "m2.webp", "alt": "Beige Sunderland of Scotland Vintage Vest detail view" },
+        { "src": "m4.webp", "alt": "Beige Sunderland of Scotland Vintage Vest extra view" }
       ]
     },
     {
       "id": "l",
       "legacyIds": ["12"],
-      "title": "Utility Cargo Pants",
+      "title": "Vintage vest",
       "displayTitle": "Utility Cargo Pants",
-      "price": 410,
+      "price": 210,
       "size": "L",
-      "status": "available",
+      "status": "sold",
       "measurements": "Waist: add measurement | Length: add measurement",
       "fabric": "Add fabric details",
       "condition": "Good vintage condition",
       "images": [
-        { "src": "cargo.jpeg", "alt": "Utility Cargo Pants front" },
-        { "src": "pants.jpeg", "alt": "Utility Cargo Pants alternate view" },
-        { "src": "cargo.jpeg", "alt": "Utility Cargo Pants detail view" },
-        { "src": "pants.jpeg", "alt": "Utility Cargo Pants extra view" }
+        { "src": "n1.webp", "alt": "Utility Cargo Pants front" },
+        { "src": "n2.webp", "alt": "Utility Cargo Pants alternate view" },
+        { "src": "n3.webp", "alt": "Utility Cargo Pants detail view" },
+        { "src": "n4.webp", "alt": "Utility Cargo Pants extra view" }
       ]
     }
   ]
