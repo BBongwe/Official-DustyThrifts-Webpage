@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // =========================================================================
   // NOTE 1: CONFIGURATION & KEYS (LOOK HERE TO UPDATE ENDPOINTS OR PUBLIC KEYS)
   // =========================================================================
-  const CART_STORAGE_KEY = 'dustythriftsCart';
-  const LAST_ORDER_STORAGE_KEY = 'dustythriftsLastOrder';
+  // Start fresh after correcting previously ambiguous catalogue IDs.
+  const CART_STORAGE_KEY = 'dustythriftsCart-v2';
   const CATALOGUE_URL = 'catalogue.json';
 
   // AWS API Gateway endpoint for processing & saving order details
@@ -524,41 +524,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function buildOrderPayload() {
-    const totals = getTotals();
     const isPepSelected = pepRadio?.checked ?? true;
     const shippingMethod = isPepSelected ? 'PEP Paxi' : 'Aramex Courier';
     const destination = isPepSelected ? pepInput?.value.trim() : aramexInput?.value.trim();
 
     return {
-      orderId: `DT-${Date.now()}`,
-      paymentStatus: 'pending',
-      currency: 'ZAR',
       customer: {
         name: document.getElementById('custName')?.value.trim() || '',
         phone: document.getElementById('custPhone')?.value.trim() || ''
       },
       shipping: {
         method: shippingMethod,
-        destination: destination || '',
-        fee: totals.shippingFee,
-        freeShipping: totals.isFreeShipping
+        destination: destination || ''
       },
       items: cart.map(item => ({
         id: item.id,
-        title: item.title,
-        price: item.price,
-        size: item.size,
-        status: item.status,
-        measurements: item.measurements,
-        fabric: item.fabric,
-        condition: item.condition
-      })),
-      totals: {
-        subtotal: totals.subtotal,
-        shipping: totals.shippingFee,
-        total: totals.total
-      },
-      createdAt: new Date().toISOString()
+        quantity: 1
+      }))
     };
   }
 
@@ -940,11 +922,6 @@ checkoutForm?.addEventListener('submit', async (event) => {
 
   const orderPayload = buildOrderPayload();
   if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-  try {
-    window.localStorage.setItem(LAST_ORDER_STORAGE_KEY, JSON.stringify(orderPayload));
-  } catch (error) {
-    // Checkout can continue without saving a local copy of the order.
-  }
 
   const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
   if (checkoutBtn) {
@@ -965,7 +942,13 @@ checkoutForm?.addEventListener('submit', async (event) => {
     const data = await response.json();
 
     if (!response.ok || !data.redirectUrl) {
-      throw new Error(data.error || 'Failed to initialize payment session.');
+      setFeedback(checkoutMessage, data.error || 'Unable to prepare checkout. Please try again.', 'error');
+      showToast('Checkout could not be prepared.');
+      if (checkoutBtn) {
+        checkoutBtn.disabled = false;
+        checkoutBtn.textContent = originalBtnText;
+      }
+      return;
     }
 
     // Redirect the customer directly to Yoco's hosted secure checkout page
