@@ -75,9 +75,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     privacy: {
       title: 'Privacy Policy',
       items: [
-        'We collect only essential details for order fulfillment: Full Name, Phone/WhatsApp Number, and Delivery details (PEP Paxi store or Aramex address).',
+        'We collect only essential details for order fulfillment: Full Name, Email Address, Phone/WhatsApp Number, and Delivery details (PEP Paxi store or Aramex address).',
         'This information is used strictly for order tracking, communication, and internal business logs.',
-        'NO data is sold, traded, or shared with third parties.',
+        'Your email address is used for order confirmations and order-related updates, not marketing.',
+        'We do not sell or trade your data. Essential service providers, including AWS and Yoco, process the details needed for orders, payments, and order communications.',
         'Bank cards and sensitive financial details are NOT handled or stored by us; they are securely processed via Yoco.'
       ]
     },
@@ -567,6 +568,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function clearCheckoutErrors() {
     setFieldError(document.getElementById('custName'), 'custNameError', '');
     setFieldError(document.getElementById('custPhone'), 'custPhoneError', '');
+    setFieldError(document.getElementById('custEmail'), 'custEmailError', '');
     setFieldError(pepInput, 'pepStoreError', '');
     setFieldError(aramexInput, 'homeAddressError', '');
   }
@@ -601,7 +603,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     return {
       customer: {
         name: document.getElementById('custName')?.value.trim() || '',
-        phone: document.getElementById('custPhone')?.value.trim() || ''
+        phone: document.getElementById('custPhone')?.value.trim() || '',
+        ...(document.getElementById('custEmail') ? { email: document.getElementById('custEmail').value.trim() } : {})
       },
       shipping: {
         method: shippingMethod,
@@ -620,6 +623,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const nameEl = document.getElementById('custName');
     const phoneEl = document.getElementById('custPhone');
+    const emailEl = document.getElementById('custEmail');
     const name = nameEl?.value.trim() || '';
     const phone = phoneEl?.value.trim() || '';
     const phoneDigits = phone.replace(/\D/g, '');
@@ -645,6 +649,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!phone || phoneDigits.length < 9) {
       setFieldError(phoneEl, 'custPhoneError', 'Please enter a valid phone number.');
+      isValid = false;
+    }
+
+    if (emailEl && (!emailEl.value.trim() || !emailEl.checkValidity()
+        || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim()))) {
+      setFieldError(emailEl, 'custEmailError', 'Please enter a valid email address.');
       isValid = false;
     }
 
