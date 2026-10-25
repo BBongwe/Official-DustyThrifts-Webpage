@@ -603,6 +603,7 @@ main {
 
 .cart-item-info h5 { margin: 0; font-size: 0.85rem; }
 .cart-item-info p { margin: 0; font-size: 0.75rem; color: #666; }
+.cart-item-info .cart-stock-error { color: var(--accent-color); font-weight: 600; }
 
 .cart-item-remove {
   background: none;
@@ -673,6 +674,7 @@ main {
   display: none;
   font-size: 0.78rem;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .form-feedback.active {
@@ -887,6 +889,8 @@ main {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+.cart-drawer.active ~ .site-toast { visibility: hidden; }
 
 .site-footer {
   text-align: center;

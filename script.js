@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let currentLightboxIndex = 0;
   let currentLightboxProduct = null;
   let catalogueProducts = [];
+  let availabilityReady = false;
+  let availabilityRequest = null;
+  let checkoutInFlight = false;
   const legalModalContent = {
     privacy: {
       title: 'Privacy Policy',
@@ -111,11 +114,75 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function displayStatus(status) {
-    return normaliseStatus(status) === 'sold' ? 'Sold' : 'Available';
+    const value = normaliseStatus(status);
+    return value === 'available' ? 'Available' : value === 'sold' ? 'Sold' : 'Unavailable';
   }
 
   function isSold(status) {
     return normaliseStatus(status) === 'sold';
+  }
+
+  function canPurchase(status) {
+    return normaliseStatus(status) === 'available';
+  }
+
+  function unavailableBasketMessage() {
+    const names = cart.filter(item => !canPurchase(item.status)).map(item => item.title);
+    if (!names.length) return '';
+    return `${names.join('; ')} ${names.length === 1 ? 'is' : 'are'} no longer available. Please remove the unavailable items from your basket to continue.`;
+  }
+
+  function applyAvailability(products) {
+    const statuses = new Map(products.map(product => [product.id, product.status]));
+    catalogueProducts.forEach(product => {
+      product.status = product.catalogueStatus === 'sold' ? 'sold' : statuses.get(product.id) || 'unavailable';
+    });
+    document.querySelectorAll('.product-card').forEach(card => {
+      const product = findCatalogueProductById(card.dataset.id);
+      if (product) card.dataset.status = product.status;
+    });
+    syncCartWithCatalogue();
+    updateCartUI();
+    if (currentLightboxProduct) {
+      const product = findCatalogueProductById(currentLightboxProduct.id);
+      if (product) currentLightboxProduct.status = product.status;
+    }
+  }
+
+  async function refreshAvailability() {
+    if (availabilityRequest) return availabilityRequest;
+    availabilityRequest = (async () => {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 8000);
+      try {
+        const response = await fetch(API_GATEWAY_URL, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'availability' }), signal: controller.signal,
+          cache: 'no-store'
+        });
+        if (!response.ok) throw new Error('Availability could not be checked.');
+        const data = await response.json();
+        if (!Array.isArray(data.products) || data.products.some(product =>
+          typeof product.id !== 'string' || !['available', 'sold'].includes(product.status)
+        ) || new Set(data.products.map(product => product.id)).size !== data.products.length) {
+          throw new Error('Invalid availability response.');
+        }
+        availabilityReady = true;
+        applyAvailability(data.products);
+        return true;
+      } catch (error) {
+        availabilityReady = false;
+        updateCartUI();
+        return false;
+      } finally {
+        window.clearTimeout(timer);
+      }
+    })();
+    try {
+      return await availabilityRequest;
+    } finally {
+      availabilityRequest = null;
+    }
   }
 
   function normaliseProduct(product, index) {
@@ -130,6 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       price: Number(product.price || 0),
       size: String(product.size || '').trim(),
       status: normaliseStatus(product.status),
+      catalogueStatus: normaliseStatus(product.status),
       measurements: String(product.measurements || '').trim(),
       fabric: String(product.fabric || '').trim(),
       condition: String(product.condition || '').trim(),
@@ -237,6 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!Array.isArray(rawProducts)) throw new Error('Catalogue must contain a products array.');
 
       catalogueProducts = rawProducts.map(normaliseProduct).filter(product => product.id && product.title);
+      await refreshAvailability();
       renderCatalogue(catalogueProducts);
     } catch (error) {
       console.error(error);
@@ -250,7 +319,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     cart = cart
       .map(item => {
         const product = findCatalogueProductById(item.id);
-        if (!product || isSold(product.status)) return null;
+        if (!product) return { ...item, status: 'unavailable' };
 
         return {
           id: product.id,
@@ -310,7 +379,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   function loadCart() {
     try {
       const savedCart = window.localStorage.getItem(CART_STORAGE_KEY);
-      return savedCart ? JSON.parse(savedCart) : [];
+      const parsed = savedCart ? JSON.parse(savedCart) : [];
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.id === 'string') : [];
     } catch (error) {
       return [];
     }
@@ -559,6 +629,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       setFeedback(checkoutMessage, 'Your basket is empty.', 'error');
       return false;
     }
+    if (!availabilityReady) {
+      setFeedback(checkoutMessage, 'Availability could not be checked. Please try again shortly.', 'error');
+      return false;
+    }
+    if (unavailableBasketMessage()) {
+      setFeedback(checkoutMessage, unavailableBasketMessage(), 'error');
+      return false;
+    }
 
     if (!name) {
       setFieldError(nameEl, 'custNameError', 'Please enter your full name.');
@@ -593,19 +671,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const statusEl = card.querySelector('.product-status');
       const alreadyInCart = cart.some(cartItem => cartItem.id === product.id);
       const sold = isSold(product.status);
+      const unavailable = !canPurchase(product.status);
 
       if (statusEl) {
-        statusEl.textContent = displayStatus(product.status);
+        statusEl.textContent = !availabilityReady && !sold ? 'Unavailable' : displayStatus(product.status);
         statusEl.classList.toggle('is-sold', sold);
       }
 
       if (!button) return;
 
-      if (sold) {
-        button.textContent = 'Sold';
+      if (unavailable || !availabilityReady) {
+        button.textContent = sold ? 'Sold' : 'Unavailable';
         button.disabled = true;
         button.classList.add('is-added');
-        button.setAttribute('aria-label', `${product.title} is sold`);
+        button.setAttribute('aria-label', `${product.title} is ${sold ? 'sold' : 'unavailable'}`);
       } else if (alreadyInCart) {
         button.textContent = 'Added';
         button.disabled = true;
@@ -663,7 +742,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (cartSubtotalEl) cartSubtotalEl.textContent = formatPrice(totals.subtotal);
     if (cartShippingEl) cartShippingEl.textContent = totals.shippingFee === 0 && totals.subtotal >= 300 && cart.length > 0 ? 'FREE' : formatPrice(totals.shippingFee);
     if (cartTotalEl) cartTotalEl.textContent = formatPrice(totals.total);
-    if (checkoutBtn) checkoutBtn.disabled = cart.length === 0;
+    if (checkoutBtn) checkoutBtn.disabled = cart.length === 0 || checkoutInFlight
+      || !availabilityReady || cart.some(item => !canPurchase(item.status));
   }
 
   function updateCartUI() {
@@ -684,10 +764,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           itemEl.classList.add('cart-item');
           itemEl.innerHTML = `
             <div class="cart-item-info">
-              <h5>${item.title}</h5>
-              <p>Size: ${item.size} | ${formatPrice(item.price)}</p>
+              <h5>${escapeHTML(item.title)}</h5>
+              <p>Size: ${escapeHTML(item.size)} | ${formatPrice(item.price)}</p>
+              ${!canPurchase(item.status) ? '<p class="cart-stock-error">No longer available</p>' : ''}
             </div>
-            <button type="button" class="cart-item-remove" data-id="${item.id}" aria-label="Remove ${item.title} from basket">Remove</button>
+            <button type="button" class="cart-item-remove" data-id="${escapeHTML(item.id)}" aria-label="Remove ${escapeHTML(item.title)} from basket">Remove</button>
           `;
           cartItemsList.appendChild(itemEl);
         });
@@ -697,13 +778,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     saveCart();
     updateCartTotals();
     updateAddButtons();
+    if (!checkoutInFlight && cart.length && !availabilityReady) {
+      setFeedback(checkoutMessage, 'Availability could not be checked. Please try again shortly.', 'error');
+    } else if (!checkoutInFlight && unavailableBasketMessage()) {
+      setFeedback(checkoutMessage, unavailableBasketMessage(), 'error');
+    } else if (!checkoutInFlight && checkoutMessage?.dataset.stockError === 'true') {
+      clearFeedback(checkoutMessage);
+    }
+    if (checkoutMessage) checkoutMessage.dataset.stockError = String(
+      !checkoutInFlight && ((!availabilityReady && cart.length > 0) || Boolean(unavailableBasketMessage()))
+    );
   }
 
   function addToCart(card) {
     const item = getProductFromCard(card);
 
-    if (isSold(item.status)) {
-      showToast(`${item.title} is marked as sold.`);
+    if (!availabilityReady || !canPurchase(item.status)) {
+      showToast(`${item.title} is currently unavailable.`);
       return;
     }
 
@@ -911,27 +1002,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 const checkoutForm = document.getElementById('checkoutForm');
 checkoutForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
-
-  if (!validateCheckoutForm()) return;
-
-  const totals = getTotals();
-  if (totals.total <= 0) {
-    setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
-    return;
-  }
-
-  const orderPayload = buildOrderPayload();
-  if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
-
+  if (checkoutInFlight) return;
+  checkoutInFlight = true;
+  window.clearTimeout(toastTimer);
+  document.getElementById('siteToast')?.classList.remove('active');
+  let redirecting = false;
   const originalBtnText = checkoutBtn ? checkoutBtn.textContent : 'Checkout';
   if (checkoutBtn) {
     checkoutBtn.disabled = true;
-    checkoutBtn.textContent = 'Redirecting to Yoco...';
+    checkoutBtn.textContent = 'Checking availability...';
   }
 
-  setFeedback(checkoutMessage, 'Preparing secure checkout...', 'success');
-
   try {
+    if (!await refreshAvailability()) {
+      setFeedback(checkoutMessage, 'Availability could not be checked. Please try again shortly.', 'error');
+      return;
+    }
+    if (!validateCheckoutForm()) return;
+    if (getTotals().total <= 0) {
+      setFeedback(checkoutMessage, 'Your basket is empty or invalid.', 'error');
+      return;
+    }
+    const orderPayload = buildOrderPayload();
+    if (orderPayloadInput) orderPayloadInput.value = JSON.stringify(orderPayload);
+    if (checkoutBtn) checkoutBtn.textContent = 'Redirecting to Yoco...';
+    setFeedback(checkoutMessage, 'Preparing secure checkout...', 'success');
     // Send order to AWS API Gateway -> Lambda
     const response = await fetch(API_GATEWAY_URL, {
       method: 'POST',
@@ -942,26 +1037,34 @@ checkoutForm?.addEventListener('submit', async (event) => {
     const data = await response.json();
 
     if (!response.ok || !data.redirectUrl) {
-      setFeedback(checkoutMessage, data.error || 'Unable to prepare checkout. Please try again.', 'error');
-      showToast('Checkout could not be prepared.');
-      if (checkoutBtn) {
-        checkoutBtn.disabled = false;
-        checkoutBtn.textContent = originalBtnText;
+      if (data.code === 'ITEMS_UNAVAILABLE' && Array.isArray(data.unavailableItems)) {
+        const unavailableIds = new Set(data.unavailableItems.map(item => item.id));
+        applyAvailability(catalogueProducts.map(product => ({
+          id: product.id, status: unavailableIds.has(product.id) ? 'sold' : product.status
+        })));
       }
+      setFeedback(checkoutMessage, data.error || 'Unable to prepare checkout. Please try again.', 'error');
+      checkoutMessage?.scrollIntoView({ block: 'nearest' });
       return;
     }
 
     // Redirect the customer directly to Yoco's hosted secure checkout page
+    redirecting = true;
     window.location.href = data.redirectUrl;
 
   } catch (error) {
+    redirecting = false;
     console.error(error);
     setFeedback(checkoutMessage, 'There was an error creating your payment session. Please try again.', 'error');
-    showToast('Error processing order.');
-    if (checkoutBtn) {
-      checkoutBtn.disabled = false;
-      checkoutBtn.textContent = originalBtnText;
+  } finally {
+    if (!redirecting) {
+      checkoutInFlight = false;
+      if (checkoutBtn) checkoutBtn.textContent = originalBtnText;
+      if (checkoutMessage && (!availabilityReady || unavailableBasketMessage())) {
+        checkoutMessage.dataset.stockError = 'true';
+      }
     }
+    updateCartTotals();
   }
 });
   // =========================================================================
@@ -1047,4 +1150,10 @@ checkoutForm?.addEventListener('submit', async (event) => {
   initialiseCarousels();
   updateShippingFields();
   updateCartUI();
+  window.setInterval(() => {
+    if (!document.hidden && !checkoutInFlight) refreshAvailability();
+  }, 30000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && !checkoutInFlight) refreshAvailability();
+  });
 });
