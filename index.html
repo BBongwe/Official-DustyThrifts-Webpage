@@ -7,7 +7,7 @@
   <meta name="description" content="Shop handpicked vintage clothing, jerseys, pants, and accessories from DustyThrifts. Curated thrift finds available online in South Africa." />
   <meta name="theme-color" content="#F4F0EA" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <link rel="stylesheet" href="style.css?v=20261024-inventory" />
+  <link rel="stylesheet" href="style.css?v=20261026-store-info" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet" />
@@ -22,7 +22,6 @@
       </div>
       <div class="nav-desktop">
         <a href="#shop">Shop</a>
-        <a href="#about">About</a>
         <a href="#collection">Archive</a>
         <a href="#contact">Contact</a>
       </div>
@@ -47,7 +46,6 @@
     <button type="button" class="close-btn" id="closeMenu" aria-label="Close menu">&times;</button>
     <ul class="nav-list-side">
       <li><a href="#shop">Shop</a></li>
-      <li><a href="#about">About</a></li>
       <li><a href="#collection">Archive</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -60,13 +58,6 @@
       <div class="products-grid" id="productsGrid" aria-live="polite">
         <p class="catalogue-message">Loading collection...</p>
       </div>
-    </section>
-
-    <section id="about" class="section about-section">
-      <h3 class="section-title">About Us</h3>
-      <p class="editorial-text">
-        DustyThrifts is a handpicked vintage clothing store where old meets gold. We specialize in timeless vintage jerseys, classic pants, and one-of-a-kind accessories.
-      </p>
     </section>
 
     <section id="collection" class="section">
@@ -116,6 +107,7 @@
             <option value="" disabled selected>Select an inquiry...</option>
             <option value="Product Inquiry">Product Inquiry</option>
             <option value="Order Status">Order Status</option>
+            <option value="Other">Other</option>
           </select>
           <small class="field-error" id="reasonError"></small>
         </div>
@@ -237,7 +229,8 @@
   <div id="siteToast" class="site-toast" role="status" aria-live="polite"></div>
 
   <footer class="site-footer">
-    <nav class="footer-legal-links" aria-label="Legal links">
+    <nav class="footer-legal-links" aria-label="Store information">
+      <button type="button" data-legal-modal="about">About Us</button>
       <button type="button" data-legal-modal="privacy">Privacy Policy</button>
       <button type="button" data-legal-modal="terms">Terms &amp; Conditions</button>
     </nav>
@@ -246,12 +239,24 @@
 
   <div class="legal-modal" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle" aria-hidden="true">
     <div class="legal-modal-panel" role="document">
-      <button type="button" class="legal-modal-close" id="legalModalClose" aria-label="Close legal information">&times;</button>
+      <button type="button" class="legal-modal-close" id="legalModalClose" aria-label="Close information">&times;</button>
       <h3 id="legalModalTitle"></h3>
       <div class="legal-modal-body" id="legalModalBody"></div>
     </div>
   </div>
 
-  <script src="script.js?v=20261025-customer-email"></script>
+  <template id="aboutModalContent">
+    <figure class="founder-profile">
+      <img src="images/me.jpg" alt="Ayibongwe Bralton, founder of DustyThrifts, seated on a bench" width="1080" height="1350" decoding="async" />
+      <figcaption><strong>Ayibongwe Bralton</strong><span>Founder &amp; CEO</span></figcaption>
+    </figure>
+    <div class="about-story">
+      <p>DustyThrifts brings affordable vintage styling to young vintage enthusiasts, with handpicked, pre-loved pieces full of character.</p>
+      <p>For me, fashion is a way of being and a form of self-expression: an extension of who we are. What we wear can shape how we feel and reveal something about us without saying a word. The DUSTY brand grew from that belief, and from a love of helping people express themselves through vintage style.</p>
+      <p>I started DustyThrifts to push myself to act on the ideas I had, even when I could not be certain they would succeed. It is about taking that first step, learning as I go, and sharing a love of vintage style along the way.</p>
+    </div>
+  </template>
+
+  <script src="script.js?v=20261026-store-info"></script>
 </body>
 </html>

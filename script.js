@@ -72,23 +72,39 @@ document.addEventListener('DOMContentLoaded', async () => {
   let availabilityRequest = null;
   let checkoutInFlight = false;
   const legalModalContent = {
+    about: {
+      title: 'About DustyThrifts',
+      templateId: 'aboutModalContent'
+    },
     privacy: {
       title: 'Privacy Policy',
       items: [
-        'We collect only essential details for order fulfillment: Full Name, Email Address, Phone/WhatsApp Number, and Delivery details (PEP Paxi store or Aramex address).',
-        'This information is used strictly for order tracking, communication, and internal business logs.',
+        'Order details: we collect your Full Name, Email Address, Phone/WhatsApp Number, and delivery details (PEP Paxi store or Aramex address) to process and fulfil your order.',
+        'Enquiries: the contact form collects the name, email address if supplied, subject and message you submit so we can respond. Please do not send card details or other sensitive financial information.',
+        'We use these details for order communication, delivery, refunds, support and business records, not unrelated purposes.',
         'Your email address is used for order confirmations and order-related updates, not marketing.',
-        'We do not sell or trade your data. Essential service providers, including AWS and Yoco, process the details needed for orders, payments, and order communications.',
-        'Bank cards and sensitive financial details are NOT handled or stored by us; they are securely processed via Yoco.'
+        'We do not sell or trade your data. AWS provides hosting, order storage and email services; Yoco processes payments; and your chosen courier receives the recipient details needed for delivery. These providers process information for their respective services.',
+        'Order storage and email services currently use AWS infrastructure in the United States. Information may therefore be processed outside South Africa.',
+        'Bank card details are entered on Yoco checkout, not collected or stored by DustyThrifts.',
+        'We retain information for order fulfilment, support, business records and applicable legal obligations. Contact us to request access, correction or deletion where permitted by law; some records may need to be retained.',
+        'You can raise a privacy concern through our contact form or lodge a complaint with the Information Regulator of South Africa.'
       ]
     },
     terms: {
       title: 'Terms & Conditions',
       items: [
-        'All items are curated, pre-loved vintage pieces with limited quantities, one per item.',
-        'Prices are in ZAR. Payments are processed securely through Yoco.',
-        'Shipping is available via PEP Paxi and Aramex Courier across South Africa.',
-        'Returns & Refunds: Refunds are accepted on a case-by-case basis. Return courier/shipping fees are the responsibility of the customer, or customers can choose to receive a store voucher for their next purchase.'
+        'About the business: DustyThrifts is operated by Ayibongwe Bralton as a sole proprietor in South Africa. Please use the contact form for order enquiries, returns and concerns.',
+        'Our items: all items are curated, pre-loved vintage pieces, with one of each item. Please review the photographs, measurements and condition description before ordering. Pre-loved status does not remove your statutory rights.',
+        'Prices and payment: prices are in ZAR. Your basket shows the item subtotal, shipping charge and total before payment through Yoco. Review and correct your basket and delivery details before proceeding.',
+        'Availability: adding an item to a basket or opening a checkout does not reserve it. The first verified successful payment allocated by our system secures the item. If a paid basket cannot be fulfilled because an item has sold, we will contact you and arrange a full refund for that basket, including shipping; refunds are not automatic.',
+        'Shipping: PEP Paxi costs R60 and Aramex Courier costs R100 within South Africa. Shipping is free when the item subtotal is R300 or more. The charge is shown before payment.',
+        'Dispatch: we hand confirmed, allocated orders to the courier within 2 working days after payment, excluding weekends and South African public holidays. Courier transit time is additional and depends on the service and destination.',
+        'Courier updates: after dispatch, PEP Paxi sends collection updates by SMS and Aramex sends shipment updates by SMS or email using the recipient details supplied. Please check these details when ordering and contact us with any delivery concerns.',
+        'Payment confirmation: returning from Yoco is not proof of payment. Keep your order email as your transaction record. Contact us if you need help or a copy. If you have paid but have not received an email, please check your spam folder and contact us before paying again.',
+        'Cooling-off returns: where section 44 of the Electronic Communications and Transactions Act applies, you may cancel without a reason or penalty within 7 days after receiving the goods. Only the direct return cost may be charged, and payments are refunded within 30 days of cancellation. Statutory exceptions apply.',
+        'Faulty or incorrectly supplied goods: your rights under the Consumer Protection Act and other applicable law remain intact. Where its six-month implied warranty applies, qualifying defective goods may be returned at our risk and expense for your choice of an applicable repair, replacement or refund. Disclosed and accepted condition, reasonable wear and misuse are considered as the law permits.',
+        'Other returns: requests outside statutory rights are considered case by case. Any agreed return costs will be explained before the return. A store voucher is optional and will never replace a refund you are legally entitled to receive.',
+        'Returns and complaints: contact us with your order reference and the issue so we can arrange the next steps. These terms do not limit applicable statutory rights or access to the relevant consumer authorities.'
       ]
     }
   };
@@ -533,13 +549,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const content = legalModalContent[type];
     if (!legalModal || !legalModalTitle || !legalModalBody || !content) return;
 
-    rememberFocus();
+    if (!legalModal.classList.contains('active')) rememberFocus();
     legalModalTitle.textContent = content.title;
-    legalModalBody.innerHTML = `
-      <ul>
-        ${content.items.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
-      </ul>
-    `;
+    if (content.templateId) {
+      legalModalBody.replaceChildren(document.getElementById(content.templateId).content.cloneNode(true));
+    } else {
+      legalModalBody.innerHTML = `<ul>${content.items.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul>`;
+    }
+    const contactLink = document.createElement('a');
+    contactLink.href = '#contact';
+    contactLink.className = 'information-contact-link';
+    contactLink.textContent = 'Contact DustyThrifts';
+    contactLink.addEventListener('click', closeLegalModal);
+    legalModalBody.append(contactLink);
+    legalModalBody.scrollTop = 0;
     legalModal.classList.add('active');
     legalModal.setAttribute('aria-hidden', 'false');
     legalModalClose?.focus();
@@ -552,6 +575,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     legalModal.classList.remove('active');
     legalModal.setAttribute('aria-hidden', 'true');
     if (legalModalBody) legalModalBody.innerHTML = '';
+    if (Object.hasOwn(legalModalContent, window.location.hash.slice(1))) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
     updatePageLock();
     restoreFocus();
   }
@@ -956,6 +982,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (event.target === legalModal) closeLegalModal();
   });
 
+  function openInformationFromHash() {
+    const type = window.location.hash.slice(1);
+    if (Object.hasOwn(legalModalContent, type)) openLegalModal(type);
+  }
+  window.addEventListener('hashchange', openInformationFromHash);
+  openInformationFromHash();
+
   lightbox?.addEventListener('click', (event) => {
     if (event.target === lightbox) closeLightbox();
   });
@@ -990,6 +1023,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   document.addEventListener('keydown', (event) => {
+    if (event.key === 'Tab' && legalModal?.classList.contains('active')) {
+      const controls = [...legalModal.querySelectorAll('button, a[href]')];
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (!legalModal.contains(document.activeElement) || (event.shiftKey && document.activeElement === first)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first)?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
     if (event.key === 'Escape') {
       closeLightbox();
       closeLegalModal();

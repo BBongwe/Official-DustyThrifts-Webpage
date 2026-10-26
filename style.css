@@ -510,21 +510,6 @@ main {
   font-family: var(--font-serif);
 }
 
-/* About Section */
-.about-section {
-  text-align: center;
-}
-
-.editorial-text {
-  font-size: 1rem;
-  max-width: 600px;
-  padding: 0.5rem 0.2rem;
-  margin: 0 auto;
-  line-height: 1;
-  color: var(--text-main);
-  text-align: center;
-}
-
 /* Cart Side Drawer */
 .cart-drawer {
   position: fixed;
@@ -823,9 +808,11 @@ main {
 
 .legal-modal-panel {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: min(calc(100vw - 2rem), 520px);
   max-height: min(82vh, 640px);
-  overflow-y: auto;
+  overflow: hidden;
   background: var(--bg-color);
   border: 1px solid var(--border-color);
   box-shadow: 6px 6px 0 var(--accent-color);
@@ -847,9 +834,18 @@ main {
 }
 
 .legal-modal h3 {
+  flex-shrink: 0;
   margin: 0 2.5rem 1rem 0;
   font-family: var(--font-serif);
   font-size: 1.45rem;
+}
+
+.legal-modal-body {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+  padding: 0.2rem 0.25rem 0.25rem;
 }
 
 .legal-modal-body ul {
@@ -864,6 +860,44 @@ main {
   color: #504c44;
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+.founder-profile {
+  margin: 0 0 1.25rem;
+  text-align: center;
+}
+
+.founder-profile img {
+  display: block;
+  width: min(100%, 200px);
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  margin: 0 auto 0.75rem;
+}
+
+.founder-profile strong,
+.founder-profile span {
+  display: block;
+}
+
+.founder-profile span {
+  font-size: 0.8rem;
+  color: #504c44;
+}
+
+.about-story p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.information-contact-link {
+  display: inline-block;
+  margin-top: 1.25rem;
+  color: var(--accent-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 0.9rem;
 }
 
 .site-toast {
@@ -908,20 +942,65 @@ main {
   margin-bottom: 0.5rem;
 }
 
-.footer-legal-links button {
+.footer-legal-links button,
+.footer-legal-links a {
   border: 0;
   background: none;
   padding: 0;
   color: var(--accent-color);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0;
   text-transform: uppercase;
   cursor: pointer;
 }
 
 .site-footer p {
   margin: 0;
+}
+
+.payment-return-page {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.payment-return {
+  width: min(100%, 700px);
+  padding: 3rem 1.5rem;
+  margin: auto;
+  overflow-wrap: anywhere;
+}
+
+.payment-return h1 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 1.25rem;
+}
+
+.payment-return h2 {
+  font-size: 1rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.payment-return p {
+  margin: 0 0 1rem;
+}
+
+.payment-return-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  margin-top: 2rem;
+}
+
+.payment-return-actions a {
+  color: var(--accent-color);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* Laptop & Desktop Optimization */
