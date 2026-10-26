@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Start fresh after correcting previously ambiguous catalogue IDs.
   const CART_STORAGE_KEY = 'dustythriftsCart-v2';
   const CATALOGUE_URL = 'catalogue.json';
+  const FREE_SHIPPING_THRESHOLD = 350;
 
   // AWS API Gateway endpoint for processing & saving order details
   const API_GATEWAY_URL = 'https://3gccheg515.execute-api.us-east-1.amazonaws.com/processDustyThriftsOrder'; 
@@ -97,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'Our items: all items are curated, pre-loved vintage pieces, with one of each item. Please review the photographs, measurements and condition description before ordering. Pre-loved status does not remove your statutory rights.',
         'Prices and payment: prices are in ZAR. Your basket shows the item subtotal, shipping charge and total before payment through Yoco. Review and correct your basket and delivery details before proceeding.',
         'Availability: adding an item to a basket or opening a checkout does not reserve it. The first verified successful payment allocated by our system secures the item. If a paid basket cannot be fulfilled because an item has sold, we will contact you and arrange a full refund for that basket, including shipping; refunds are not automatic.',
-        'Shipping: PEP Paxi costs R60 and Aramex Courier costs R100 within South Africa. Shipping is free when the item subtotal is R300 or more. The charge is shown before payment.',
+        'Shipping: PEP Paxi costs R60 and Aramex Courier costs R100 within South Africa. Shipping is free when the item subtotal is R350 or more. The charge is shown before payment.',
         'Dispatch: we hand confirmed, allocated orders to the courier within 2 working days after payment, excluding weekends and South African public holidays. Courier transit time is additional and depends on the service and destination.',
         'Courier updates: after dispatch, PEP Paxi sends collection updates by SMS and Aramex sends shipment updates by SMS or email using the recipient details supplied. Please check these details when ordering and contact us with any delivery concerns.',
         'Payment confirmation: returning from Yoco is not proof of payment. Keep your order email as your transaction record. Contact us if you need help or a copy. If you have paid but have not received an email, please check your spam folder and contact us before paying again.',
@@ -613,7 +614,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function getTotals() {
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
-    const isFreeShipping = subtotal >= 300;
+    const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
     const isPepSelected = pepRadio?.checked ?? true;
     const shippingFee = cart.length === 0 ? 0 : isFreeShipping ? 0 : isPepSelected ? 60 : 100;
     const total = cart.length > 0 ? subtotal + shippingFee : 0;
@@ -764,19 +765,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (pepPriceLabel) pepPriceLabel.textContent = 'FREE';
         if (aramexPriceLabel) aramexPriceLabel.textContent = 'FREE';
       } else {
-        const diff = 300 - totals.subtotal;
+        const diff = FREE_SHIPPING_THRESHOLD - totals.subtotal;
         if (shippingBanner) shippingBanner.innerHTML = `Add <strong>${formatPrice(diff)}</strong> more for FREE Shipping!`;
         if (pepPriceLabel) pepPriceLabel.textContent = 'R60';
         if (aramexPriceLabel) aramexPriceLabel.textContent = 'R100';
       }
     } else {
-      if (shippingBanner) shippingBanner.innerHTML = 'Add R300 or more for <strong>FREE Shipping!</strong>';
+      if (shippingBanner) shippingBanner.innerHTML = `Add ${formatPrice(FREE_SHIPPING_THRESHOLD)} or more for <strong>FREE Shipping!</strong>`;
       if (pepPriceLabel) pepPriceLabel.textContent = 'R60';
       if (aramexPriceLabel) aramexPriceLabel.textContent = 'R100';
     }
 
     if (cartSubtotalEl) cartSubtotalEl.textContent = formatPrice(totals.subtotal);
-    if (cartShippingEl) cartShippingEl.textContent = totals.shippingFee === 0 && totals.subtotal >= 300 && cart.length > 0 ? 'FREE' : formatPrice(totals.shippingFee);
+    if (cartShippingEl) cartShippingEl.textContent = totals.isFreeShipping && cart.length > 0 ? 'FREE' : formatPrice(totals.shippingFee);
     if (cartTotalEl) cartTotalEl.textContent = formatPrice(totals.total);
     if (checkoutBtn) checkoutBtn.disabled = cart.length === 0 || checkoutInFlight
       || !availabilityReady || cart.some(item => !canPurchase(item.status));
