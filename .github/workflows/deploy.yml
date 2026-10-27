@@ -30,6 +30,7 @@ jobs:
             --include "style.css" \
             --include "catalogue.json" \
             --include "success.html" \
+            --include "favicon.ico" \
             --include "*.webp" \
             --include "*.jpg" \
             --include "*.jpeg" \
@@ -44,6 +45,13 @@ jobs:
             --exclude ".github/*" \
             --exclude ".aws/*" \
             --exclude "backend/*"
+
+      - name: Upload web manifest with its JSON content type
+        run: |
+          aws s3 cp site.webmanifest s3://dustythrifts.com/site.webmanifest \
+            --content-type application/manifest+json \
+            --cache-control no-cache \
+            --only-show-errors
 
       - name: Invalidate CloudFront Cache
         run: |
