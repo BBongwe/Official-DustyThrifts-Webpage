@@ -112,7 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // HELPER FUNCTIONS (FORMATTING & DATA PARSING)
   // =========================================================================
   function formatPrice(amount) {
-    return `R${Number(amount || 0).toFixed(0)}`;
+    const price = Number(amount || 0);
+    return `R${price.toFixed(Number.isInteger(price) ? 0 : 2)}`;
   }
 
   function escapeHTML(value) {
@@ -482,11 +483,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const product = currentLightboxProduct;
     lightboxDetails.innerHTML = `
-      <h4>${product.title}</h4>
-      <p><strong>${formatPrice(product.price)}</strong> | Size: ${product.size} | ${displayStatus(product.status)}</p>
-      <p><strong>Measurements:</strong> ${product.measurements || 'To be added'}</p>
-      <p><strong>Fabric:</strong> ${product.fabric || 'To be added'}</p>
-      <p><strong>Condition:</strong> ${product.condition || 'Vintage condition'}</p>
+      <h4>${escapeHTML(product.title)}</h4>
+      <p><strong>${formatPrice(product.price)}</strong> | Size: ${escapeHTML(product.size)} | ${escapeHTML(displayStatus(product.status))}</p>
+      <p><strong>Measurements:</strong> ${escapeHTML(product.measurements || 'To be added')}</p>
+      <p><strong>Fabric:</strong> ${escapeHTML(product.fabric || 'To be added')}</p>
+      <p><strong>Condition:</strong> ${escapeHTML(product.condition || 'Vintage condition')}</p>
     `;
   }
 
