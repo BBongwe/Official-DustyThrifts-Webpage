@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Website code and shared branding only; product data and photos belong to dashboard publication.",
+  "files": [
+    "index.html",
+    "script.js",
+    "style.css",
+    "success.html",
+    "site.webmanifest",
+    "favicon.ico",
+    "apple-touch-icon.png",
+    "ai1.webp",
+    "ai2.webp",
+    "ai3.webp",
+    "ai4.webp",
+    "images/me.jpg",
+    "images/icons/favicon-16.png",
+    "images/icons/favicon-32.png",
+    "images/icons/favicon-48.png",
+    "images/icons/icon-192.png",
+    "images/icons/icon-512.png"
+  ]
+}
