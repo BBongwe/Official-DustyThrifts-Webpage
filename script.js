@@ -1205,9 +1205,6 @@ checkoutForm?.addEventListener('submit', async (event) => {
   initialiseCarousels();
   updateShippingFields();
   updateCartUI();
-  window.setInterval(() => {
-    if (!document.hidden && !checkoutInFlight) refreshAvailability();
-  }, 30000);
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && !checkoutInFlight) refreshAvailability();
   });
